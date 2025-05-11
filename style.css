@@ -1,86 +1,96 @@
 :root {
-  --primary: #2c3e50;
-  --secondary: #3498db;
-  --accent: #e74c3c;
-  --light: #ecf0f1;
-  --dark: #2c3e50;
+  --primary: #4361ee;
+  --primary-dark: #3a56d4;
+  --secondary: #3f37c9;
+  --accent: #f72585;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --gray: #6c757d;
+  --border-radius: 12px;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+/* Базовые стили */
 body {
-  font-family: 'Montserrat', sans-serif;
-  background: #f5f7fa;
-  margin: 0;
-  padding: 20px;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: #f5f7ff;
   color: var(--dark);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
 }
 
-.header {
+#app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Шапка приложения */
+.app-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
+  animation: fadeInDown 0.6s ease-out;
 }
 
-.header h1 {
+.app-title {
+  font-size: 2.5rem;
   color: var(--primary);
-  font-size: 2.2rem;
   margin-bottom: 10px;
+  font-weight: 700;
 }
 
-.header p {
-  color: #7f8c8d;
+.app-subtitle {
   font-size: 1.1rem;
+  color: var(--gray);
 }
 
-.gallery-container {
+/* Сетка разделов */
+.sections-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 25px;
   padding: 10px;
 }
 
 .section-card {
-  position: relative;
-  border-radius: 12px;
+  background: white;
+  border-radius: var(--border-radius);
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
   cursor: pointer;
+  position: relative;
 }
 
 .section-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 }
 
-.image-container {
-  position: relative;
+.section-image {
   width: 100%;
-  height: 200px;
-}
-
-.image-container img {
-  width: 100%;
-  height: 100%;
+  height: 160px;
   object-fit: cover;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-  color: white;
+.section-content {
   padding: 20px;
 }
 
-.overlay h3 {
-  margin: 0;
-  font-size: 1.2rem;
+.section-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 10px;
+  color: var(--dark);
 }
 
-.overlay p {
-  margin: 5px 0 0;
-  font-size: 0.9rem;
-  opacity: 0.9;
+.section-description {
+  color: var(--gray);
+  font-size: 0.95rem;
+  margin-bottom: 15px;
 }
 
 .section-number {
@@ -89,22 +99,116 @@ body {
   right: 15px;
   background: var(--accent);
   color: white;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 3px 10px rgba(247, 37, 133, 0.3);
 }
 
+/* Страница урока */
+.lesson-container {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 30px;
+  box-shadow: var(--shadow);
+  margin-top: 20px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.lesson-header {
+  margin-bottom: 25px;
+}
+
+.lesson-title {
+  font-size: 1.8rem;
+  color: var(--primary-dark);
+  margin: 0 0 10px;
+  font-weight: 700;
+}
+
+.lesson-image {
+  width: 100%;
+  border-radius: 8px;
+  margin: 20px 0;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  max-height: 300px;
+  object-fit: cover;
+}
+
+.lesson-content {
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+
+.lesson-content code {
+  background: #f3f4ff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Fira Code', monospace;
+  color: #3a0ca3;
+  font-size: 0.9rem;
+}
+
+/* Кнопки */
+.btn {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  text-align: center;
+  margin: 10px 5px;
+  box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+}
+
+.btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(67, 97, 238, 0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn-outline:hover {
+  background: rgba(67, 97, 238, 0.05);
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Адаптивность */
 @media (max-width: 768px) {
-  .gallery-container {
+  .sections-grid {
     grid-template-columns: 1fr;
   }
   
-  .header h1 {
-    font-size: 1.8rem;
+  .app-title {
+    font-size: 2rem;
+  }
+  
+  .lesson-title {
+    font-size: 1.5rem;
   }
 }
