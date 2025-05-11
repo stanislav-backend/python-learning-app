@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Путь Питониста</title>
+    <link href="style.css" rel="stylesheet" />
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Загрузка...</h1>
+    </div>
+
+    <script>
+      // Глобальные переменные
+      let currentSection = null;
+      let currentLesson = null;
+      const app = document.getElementById("app");
+
+      // Загрузка данных из sections.json
+      async function loadData() {
+        const response = await fetch("sections.json");
+        return await response.json();
+      }
+
+      // Показать список разделов
+      async function showSections() {
+        const sections = await loadData();
+        let html = '<h1>🐍 Путь Питониста</h1><div class="sections">';
+
+        for (const [id, section] of Object.entries(sections)) {
+          html += `
+                    <div class="section ${section.locked ? "locked" : ""}" 
+                         onclick="${
+                           section.locked ? "" : `showLessons('${id}')`
+                         }">
+                        <span class="icon">${section.icon}</span>
+                        <h3>${section.title}</h3>
+                        <p>${section.description}</p>
+                        ${
+                          section.locked
+                            ? '<div class="lock">🔒 Заблокировано</div>'
+                            : ""
+                        }
+                    </div>
+                `;
+        }
+
+        html += "</div>";
+        app.innerHTML = html;
+      }
+
+      // Показать уроки раздела
+      async function showLessons(sectionId) {
+        const sections = await loadData();
+        const section = sections[sectionId];
+        currentSection = sectionId;
+
+        let html = `
+                <button onclick="showSections()">← Назад</button>
+                <h2>${section.title}</h2>
+                <div class="lessons">
+            `;
+
+        for (const [lessonId, lesson] of Object.entries(section.lessons)) {
+          html += `
+                    <div class="lesson" onclick="showLesson('${lessonId}')">
+                        <h3>${lesson.title}</h3>
+                    </div>
+                `;
+        }
+
+        html += "</div>";
+        app.innerHTML = html;
+      }
+
+      // Показать урок
+      async function showLesson(lessonId) {
+        const sections = await loadData();
+        const lesson = sections[currentSection].lessons[lessonId];
+        currentLesson = lessonId;
+
+        app.innerHTML = `
+                <button onclick="showLessons('${currentSection}')">← Назад</button>
+                <h2>${lesson.title}</h2>
+                <div class="content">${lesson.content}</div>
+                <button onclick="showTask()">Начать задание</button>
+            `;
+      }
+
+      // Показать задание
+      async function showTask() {
+        const sections = await loadData();
+        const task = sections[currentSection].lessons[currentLesson].tasks[0];
+
+        app.innerHTML = `
+                <button onclick="showLesson('${currentLesson}')">← Назад</button>
+                <h3>${task.question}</h3>
+                <div class="options">
+                    ${task.options
+                      .map(
+                        (opt, i) => `
+                        <button onclick="checkAnswer(${i}, ${task.correct})">${opt}</button>
+                    `
+                      )
+                      .join("")}
+                </div>
+            `;
+      }
+
+      // Проверить ответ
+      function checkAnswer(selected, correct) {
+        if (selected === correct) {
+          alert("✅ Верно!");
+        } else {
+          alert("❌ Неверно! Попробуйте ещё раз.");
+        }
+      }
+
+      // Запуск приложения
+      document.addEventListener("DOMContentLoaded", showSections);
+    </script>
+  </body>
+</html>
