@@ -5,17 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Путь Питониста</title>
   <link href="style.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div id="app">
-    <div class="header">
-      <h1>🐍 Путь Питониста</h1>
-      <p>Освой Python в интерактивном формате</p>
+    <div class="app-header fade-in">
+      <h1 class="app-title">🐍 Путь Питониста</h1>
+      <p class="app-subtitle">Стань мастером Python!</p>
     </div>
     
-    <div id="content">
+    <div id="content" class="fade-in">
       <!-- Контент будет загружаться здесь -->
     </div>
   </div>
@@ -24,95 +24,173 @@
     // Глобальные переменные
     const contentDiv = document.getElementById('content');
     let sectionsData = {};
-    let currentSection = null;
-    let currentLesson = null;
-
+    let currentUser = {};
+    
     // Загрузка данных
-    async function loadSections() {
-      const response = await fetch('sections.json');
-      sectionsData = await response.json();
-      renderSections();
+    async function loadApp() {
+      try {
+        // Показываем загрузку
+        contentDiv.innerHTML = `
+          <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Загрузка данных...</p>
+          </div>
+        `;
+        
+        // Загружаем данные
+        const response = await fetch('sections.json');
+        sectionsData = await response.json();
+        
+        // Инициализируем пользователя
+        initUser();
+        
+        // Показываем разделы
+        showMainMenu();
+        
+      } catch (error) {
+        showError("Ошибка загрузки данных. Пожалуйста, попробуйте позже.");
+        console.error(error);
+      }
     }
-
-    // Отображение разделов
-    function renderSections() {
-      let html = '<div class="sections-grid">';
+    
+    // Инициализация пользователя
+    function initUser() {
+      if (localStorage.getItem('pythonistaUser')) {
+        currentUser = JSON.parse(localStorage.getItem('pythonistaUser'));
+      } else {
+        currentUser = {
+          progress: {},
+          xp: 0,
+          streak: 0
+        };
+        saveUserData();
+      }
+    }
+    
+    // Сохранение данных пользователя
+    function saveUserData() {
+      localStorage.setItem('pythonistaUser', JSON.stringify(currentUser));
+    }
+    
+    // Главное меню
+    function showMainMenu() {
+      let html = `
+        <div class="sections-grid">
+      `;
       
       for (const [id, section] of Object.entries(sectionsData)) {
-        const isLocked = section.locked;
+        const progress = currentUser.progress[id] || 0;
         
         html += `
-          <div class="section-card ${isLocked ? 'locked' : ''}" 
-               onclick="${isLocked ? '' : `showLessons('${id}')`}"
-               style="animation-delay: ${parseInt(id)*0.1}s">
+          <div class="section-card" onclick="showSection('${id}')">
             <div class="section-icon">${section.icon}</div>
             <h3 class="section-title">${section.title}</h3>
             <p class="section-description">${section.description}</p>
-            ${isLocked ? '<div class="lock-badge">🔒</div>' : ''}
+            
+            ${progress > 0 ? `
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: ${progress}%"></div>
+              </div>
+            ` : ''}
+            
+            ${section.locked ? `
+              <div class="locked-overlay">
+                🔒 Доступ после прохождения предыдущих разделов
+              </div>
+            ` : ''}
           </div>
         `;
       }
       
-      html += '</div>';
+      html += `</div>`;
+      
       contentDiv.innerHTML = html;
     }
-
-    // Показать уроки раздела
-    function showLessons(sectionId) {
-      currentSection = sectionId;
+    
+    // Показать раздел
+    function showSection(sectionId) {
       const section = sectionsData[sectionId];
       
+      if (section.locked) {
+        showAlert('Этот раздел пока заблокирован. Пройдите предыдущие разделы для доступа.', 'error');
+        return;
+      }
+      
       let html = `
-        <div class="back-btn" onclick="renderSections()">← Все разделы</div>
-        <h2 class="section-header">${section.title}</h2>
+        <button class="btn btn-outline" onclick="showMainMenu()">
+          ← Назад к разделам
+        </button>
+        
+        <div class="section-header">
+          <h2>${section.title}</h2>
+          <p>${section.description}</p>
+        </div>
+        
         <div class="lessons-list">
       `;
       
       for (const [lessonId, lesson] of Object.entries(section.lessons)) {
         html += `
-          <div class="lesson-card" onclick="showLesson('${lessonId}')">
+          <div class="lesson-card" onclick="showLesson('${sectionId}', '${lessonId}')">
             <div class="lesson-icon">📚</div>
             <div class="lesson-info">
               <h3>${lesson.title}</h3>
-              <p>${lesson.content.substring(0, 60)}...</p>
+              <p>${lesson.content.substring(0, 80)}...</p>
             </div>
+            <div class="lesson-arrow">→</div>
           </div>
         `;
       }
       
-      html += '</div>';
+      html += `</div>`;
       contentDiv.innerHTML = html;
     }
-
+    
     // Показать урок
-    function showLesson(lessonId) {
-      currentLesson = lessonId;
-      const lesson = sectionsData[currentSection].lessons[lessonId];
+    function showLesson(sectionId, lessonId) {
+      const lesson = sectionsData[sectionId].lessons[lessonId];
       
-      const html = `
-        <div class="back-btn" onclick="showLessons('${currentSection}')">← ${sectionsData[currentSection].title}</div>
+      let html = `
+        <button class="btn btn-outline" onclick="showSection('${sectionId}')">
+          ← Назад к разделу
+        </button>
+        
         <div class="lesson-container">
           <h1 class="lesson-title">${lesson.title}</h1>
-          <div class="lesson-content">${lesson.content}</div>
-          <button class="btn" onclick="startTask()">Начать задание →</button>
+          
+          ${lesson.image ? `
+            <img src="images/${lesson.image}" class="lesson-image" alt="${lesson.title}">
+          ` : ''}
+          
+          <div class="lesson-content">
+            ${lesson.content}
+          </div>
+          
+          <button class="btn" onclick="startTask('${sectionId}', '${lessonId}')">
+            Начать задание →
+          </button>
         </div>
       `;
       
       contentDiv.innerHTML = html;
     }
-
+    
     // Начать задание
-    function startTask() {
-      const task = sectionsData[currentSection].lessons[currentLesson].tasks[0];
+    function startTask(sectionId, lessonId) {
+      const task = sectionsData[sectionId].lessons[lessonId].tasks[0];
       
-      const html = `
-        <div class="back-btn" onclick="showLesson('${currentLesson}')">← Вернуться к уроку</div>
+      let html = `
+        <button class="btn btn-outline" onclick="showLesson('${sectionId}', '${lessonId}')">
+          ← Вернуться к уроку
+        </button>
+        
         <div class="task-container">
-          <h2>Задание</h2>
+          <h2>Практическое задание</h2>
           <div class="task-question">${task.question}</div>
+          
           <div class="task-options">
             ${task.options.map((option, index) => `
-              <div class="option" onclick="checkAnswer(${index}, ${task.correct})">
+              <div class="task-option" onclick="checkAnswer('${sectionId}', '${lessonId}', ${index}, ${task.correct})">
                 ${option}
               </div>
             `).join('')}
@@ -122,10 +200,10 @@
       
       contentDiv.innerHTML = html;
     }
-
+    
     // Проверить ответ
-    function checkAnswer(selected, correct) {
-      const options = document.querySelectorAll('.option');
+    function checkAnswer(sectionId, lessonId, selected, correct) {
+      const options = document.querySelectorAll('.task-option');
       
       options.forEach((opt, idx) => {
         if (idx === correct) {
@@ -139,15 +217,59 @@
       
       setTimeout(() => {
         if (selected === correct) {
-          alert('✅ Правильно! Молодец!');
+          updateProgress(sectionId, lessonId);
+          showAlert('✅ Правильно! Вы получаете +10 XP!', 'success');
         } else {
-          alert('❌ Неверно, попробуйте ещё раз');
+          showAlert('❌ Неверно. Попробуйте ещё раз!', 'error');
         }
-      }, 300);
+      }, 500);
     }
-
-    // Инициализация
-    document.addEventListener('DOMContentLoaded', loadSections);
+    
+    // Обновить прогресс
+    function updateProgress(sectionId, lessonId) {
+      if (!currentUser.progress[sectionId]) {
+        currentUser.progress[sectionId] = 0;
+      }
+      
+      // Добавляем XP
+      currentUser.xp += 10;
+      
+      // Обновляем прогресс раздела
+      const totalLessons = Object.keys(sectionsData[sectionId].lessons).length;
+      const completedLessons = Object.keys(sectionsData[sectionId].lessons)
+        .filter(id => currentUser.progress[`${sectionId}_${id}`]).length;
+      
+      currentUser.progress[sectionId] = Math.round((completedLessons / totalLessons) * 100);
+      saveUserData();
+    }
+    
+    // Показать уведомление
+    function showAlert(message, type) {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert alert-${type} fade-in`;
+      alertDiv.innerHTML = message;
+      
+      contentDiv.prepend(alertDiv);
+      
+      setTimeout(() => {
+        alertDiv.remove();
+      }, 3000);
+    }
+    
+    // Показать ошибку
+    function showError(message) {
+      contentDiv.innerHTML = `
+        <div class="error-container">
+          <div class="error-icon">⚠️</div>
+          <h3>Произошла ошибка</h3>
+          <p>${message}</p>
+          <button class="btn" onclick="loadApp()">Попробовать снова</button>
+        </div>
+      `;
+    }
+    
+    // Запуск приложения
+    document.addEventListener('DOMContentLoaded', loadApp);
   </script>
 </body>
 </html>
