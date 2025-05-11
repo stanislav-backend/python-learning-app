@@ -1,84 +1,159 @@
+/* Основные стили */
+:root {
+  --primary: #2b3d4f;
+  --secondary: #3aafa9;
+  --accent: #fe654f;
+  --light: #def2f1;
+  --dark: #17252a;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   margin: 0;
-  padding: 15px;
-  color: #333;
+  padding: 0;
+  min-height: 100vh;
+  color: var(--dark);
 }
 
 #app {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
-  background: white;
   padding: 20px;
-  border-radius: 10px;
-  min-height: 90vh;
 }
 
-button {
-  background: #4caf50;
+/* Шапка */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.header h1 {
+  color: var(--primary);
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+.header p {
+  color: var(--secondary);
+  font-size: 1.1rem;
+}
+
+/* Сетка разделов */
+.sections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 25px;
+  padding: 20px;
+}
+
+.section-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.3);
+  backdrop-filter: blur(10px);
+  animation: cardAppear 0.5s ease-out;
+  animation-fill-mode: backwards;
+}
+
+.section-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+.section-card.locked {
+  position: relative;
+  filter: grayscale(70%);
+  opacity: 0.8;
+}
+
+.section-icon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: var(--secondary);
+}
+
+.section-title {
+  font-weight: 600;
+  margin: 10px 0;
+  color: var(--primary);
+}
+
+.section-description {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cardAppear {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Кнопки */
+.btn {
+  background: var(--secondary);
   color: white;
   border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  margin: 10px 0;
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 16px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(58, 175, 169, 0.3);
 }
 
-button:hover {
-  background: #45a049;
+.btn:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(254, 101, 79, 0.4);
 }
 
-.sections {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
+/* Страница урока */
+.lesson-container {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   margin-top: 20px;
 }
 
-.section {
-  background: #fff;
-  border: 1px solid #ddd;
-  padding: 15px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: transform 0.2s;
+.lesson-title {
+  color: var(--primary);
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--light);
+  padding-bottom: 10px;
 }
 
-.section:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.lesson-content {
+  line-height: 1.7;
+  font-size: 1.1rem;
 }
 
-.section.locked {
-  opacity: 0.6;
-  background: #f9f9f9;
-  cursor: not-allowed;
+.lesson-content code {
+  background: var(--light);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
 }
 
-.icon {
-  font-size: 24px;
-  display: block;
-  margin-bottom: 10px;
-}
-
-.lesson {
-  background: #f0f8ff;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.options button {
-  display: block;
-  width: 100%;
-  margin: 8px 0;
-}
-
-.lock {
-  color: #ff5555;
-  text-align: center;
-  margin-top: 5px;
+/* Адаптивность */
+@media (max-width: 768px) {
+  .sections-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
 }
