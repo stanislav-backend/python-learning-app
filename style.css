@@ -1,223 +1,110 @@
 :root {
-  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --card-bg: rgba(255, 255, 255, 0.95);
-  --text-dark: #2d3748;
-  --text-light: #f8f9fa;
-  --primary: #6c5ce7;
-  --secondary: #a29bfe;
-  --accent: #fd79a8;
-  --success: #00b894;
-  --error: #d63031;
-  --border-radius: 16px;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --primary: #2c3e50;
+  --secondary: #3498db;
+  --accent: #e74c3c;
+  --light: #ecf0f1;
+  --dark: #2c3e50;
 }
 
-/* Базовые стили */
 body {
-  font-family: 'Poppins', sans-serif;
-  background: var(--bg-gradient);
-  color: var(--text-dark);
+  font-family: 'Montserrat', sans-serif;
+  background: #f5f7fa;
   margin: 0;
   padding: 20px;
-  min-height: 100vh;
-  background-attachment: fixed;
+  color: var(--dark);
 }
 
-#app {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* Шапка приложения */
-.app-header {
+.header {
   text-align: center;
-  margin-bottom: 40px;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  margin-bottom: 30px;
 }
 
-.app-title {
-  font-size: 2.8rem;
+.header h1 {
+  color: var(--primary);
+  font-size: 2.2rem;
   margin-bottom: 10px;
-  font-weight: 700;
 }
 
-.app-subtitle {
-  font-size: 1.2rem;
-  opacity: 0.9;
+.header p {
+  color: #7f8c8d;
+  font-size: 1.1rem;
 }
 
-/* Карточки разделов */
-.sections-grid {
+.gallery-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 25px;
-  padding: 20px;
+  padding: 10px;
 }
 
 .section-card {
-  background: var(--card-bg);
-  border-radius: var(--border-radius);
-  padding: 25px;
-  box-shadow: var(--shadow);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  cursor: pointer;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,0.2);
-  backdrop-filter: blur(5px);
   position: relative;
+  border-radius: 12px;
   overflow: hidden;
-}
-
-.section-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 5px;
-  background: var(--primary);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  cursor: pointer;
 }
 
 .section-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
 
-.section-icon {
-  font-size: 3rem;
-  margin-bottom: 15px;
-  color: var(--primary);
-}
-
-.section-title {
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin: 15px 0;
-  color: var(--text-dark);
-}
-
-.section-description {
-  font-size: 0.95rem;
-  color: #666;
-  margin-bottom: 20px;
-}
-
-/* Страница урока */
-.lesson-container {
-  background: var(--card-bg);
-  border-radius: var(--border-radius);
-  padding: 30px;
-  box-shadow: var(--shadow);
-  margin-bottom: 30px;
-}
-
-.lesson-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 25px;
-}
-
-.lesson-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--primary);
-  margin: 0;
-}
-
-.lesson-image {
+.image-container {
+  position: relative;
   width: 100%;
-  border-radius: 12px;
-  margin: 20px 0;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  max-height: 300px;
+  height: 200px;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
-.lesson-content {
-  line-height: 1.8;
-  font-size: 1.1rem;
-}
-
-.lesson-content code {
-  background: #f3f4f6;
-  padding: 3px 6px;
-  border-radius: 4px;
-  font-family: 'Fira Code', monospace;
-  font-size: 0.9rem;
-}
-
-/* Кнопки */
-.btn {
-  display: inline-block;
-  background: var(--primary);
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
   color: white;
-  border: none;
-  padding: 12px 28px;
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
-  text-decoration: none;
-  text-align: center;
-  margin: 10px 5px;
+  padding: 20px;
 }
 
-.btn:hover {
+.overlay h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.overlay p {
+  margin: 5px 0 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.section-number {
+  position: absolute;
+  top: 15px;
+  right: 15px;
   background: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: 0 7px 20px rgba(253, 121, 168, 0.4);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
-.btn-secondary {
-  background: var(--secondary);
-}
-
-.btn-outline {
-  background: transparent;
-  border: 2px solid var(--primary);
-  color: var(--primary);
-}
-
-/* Уведомления и ошибки */
-.alert {
-  padding: 15px 20px;
-  border-radius: var(--border-radius);
-  margin: 20px 0;
-  font-weight: 500;
-}
-
-.alert-success {
-  background: rgba(0, 184, 148, 0.15);
-  color: var(--success);
-  border-left: 4px solid var(--success);
-}
-
-.alert-error {
-  background: rgba(214, 48, 49, 0.15);
-  color: var(--error);
-  border-left: 4px solid var(--error);
-}
-
-/* Анимации */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.fade-in {
-  animation: fadeIn 0.6s ease-out forwards;
-}
-
-/* Адаптивность */
 @media (max-width: 768px) {
-  .sections-grid {
+  .gallery-container {
     grid-template-columns: 1fr;
   }
   
-  .app-title {
-    font-size: 2rem;
+  .header h1 {
+    font-size: 1.8rem;
   }
 }
