@@ -1,125 +1,153 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Путь Питониста</title>
-    <link href="style.css" rel="stylesheet" />
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  </head>
-  <body>
-    <div id="app">
-      <h1>Загрузка...</h1>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Путь Питониста</title>
+  <link href="style.css" rel="stylesheet">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+    <div class="header">
+      <h1>🐍 Путь Питониста</h1>
+      <p>Освой Python в интерактивном формате</p>
     </div>
+    
+    <div id="content">
+      <!-- Контент будет загружаться здесь -->
+    </div>
+  </div>
 
-    <script>
-      // Глобальные переменные
-      let currentSection = null;
-      let currentLesson = null;
-      const app = document.getElementById("app");
+  <script>
+    // Глобальные переменные
+    const contentDiv = document.getElementById('content');
+    let sectionsData = {};
+    let currentSection = null;
+    let currentLesson = null;
 
-      // Загрузка данных из sections.json
-      async function loadData() {
-        const response = await fetch("sections.json");
-        return await response.json();
+    // Загрузка данных
+    async function loadSections() {
+      const response = await fetch('sections.json');
+      sectionsData = await response.json();
+      renderSections();
+    }
+
+    // Отображение разделов
+    function renderSections() {
+      let html = '<div class="sections-grid">';
+      
+      for (const [id, section] of Object.entries(sectionsData)) {
+        const isLocked = section.locked;
+        
+        html += `
+          <div class="section-card ${isLocked ? 'locked' : ''}" 
+               onclick="${isLocked ? '' : `showLessons('${id}')`}"
+               style="animation-delay: ${parseInt(id)*0.1}s">
+            <div class="section-icon">${section.icon}</div>
+            <h3 class="section-title">${section.title}</h3>
+            <p class="section-description">${section.description}</p>
+            ${isLocked ? '<div class="lock-badge">🔒</div>' : ''}
+          </div>
+        `;
       }
+      
+      html += '</div>';
+      contentDiv.innerHTML = html;
+    }
 
-      // Показать список разделов
-      async function showSections() {
-        const sections = await loadData();
-        let html = '<h1>🐍 Путь Питониста</h1><div class="sections">';
+    // Показать уроки раздела
+    function showLessons(sectionId) {
+      currentSection = sectionId;
+      const section = sectionsData[sectionId];
+      
+      let html = `
+        <div class="back-btn" onclick="renderSections()">← Все разделы</div>
+        <h2 class="section-header">${section.title}</h2>
+        <div class="lessons-list">
+      `;
+      
+      for (const [lessonId, lesson] of Object.entries(section.lessons)) {
+        html += `
+          <div class="lesson-card" onclick="showLesson('${lessonId}')">
+            <div class="lesson-icon">📚</div>
+            <div class="lesson-info">
+              <h3>${lesson.title}</h3>
+              <p>${lesson.content.substring(0, 60)}...</p>
+            </div>
+          </div>
+        `;
+      }
+      
+      html += '</div>';
+      contentDiv.innerHTML = html;
+    }
 
-        for (const [id, section] of Object.entries(sections)) {
-          html += `
-                    <div class="section ${section.locked ? "locked" : ""}" 
-                         onclick="${
-                           section.locked ? "" : `showLessons('${id}')`
-                         }">
-                        <span class="icon">${section.icon}</span>
-                        <h3>${section.title}</h3>
-                        <p>${section.description}</p>
-                        ${
-                          section.locked
-                            ? '<div class="lock">🔒 Заблокировано</div>'
-                            : ""
-                        }
-                    </div>
-                `;
+    // Показать урок
+    function showLesson(lessonId) {
+      currentLesson = lessonId;
+      const lesson = sectionsData[currentSection].lessons[lessonId];
+      
+      const html = `
+        <div class="back-btn" onclick="showLessons('${currentSection}')">← ${sectionsData[currentSection].title}</div>
+        <div class="lesson-container">
+          <h1 class="lesson-title">${lesson.title}</h1>
+          <div class="lesson-content">${lesson.content}</div>
+          <button class="btn" onclick="startTask()">Начать задание →</button>
+        </div>
+      `;
+      
+      contentDiv.innerHTML = html;
+    }
+
+    // Начать задание
+    function startTask() {
+      const task = sectionsData[currentSection].lessons[currentLesson].tasks[0];
+      
+      const html = `
+        <div class="back-btn" onclick="showLesson('${currentLesson}')">← Вернуться к уроку</div>
+        <div class="task-container">
+          <h2>Задание</h2>
+          <div class="task-question">${task.question}</div>
+          <div class="task-options">
+            ${task.options.map((option, index) => `
+              <div class="option" onclick="checkAnswer(${index}, ${task.correct})">
+                ${option}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      
+      contentDiv.innerHTML = html;
+    }
+
+    // Проверить ответ
+    function checkAnswer(selected, correct) {
+      const options = document.querySelectorAll('.option');
+      
+      options.forEach((opt, idx) => {
+        if (idx === correct) {
+          opt.classList.add('correct');
         }
-
-        html += "</div>";
-        app.innerHTML = html;
-      }
-
-      // Показать уроки раздела
-      async function showLessons(sectionId) {
-        const sections = await loadData();
-        const section = sections[sectionId];
-        currentSection = sectionId;
-
-        let html = `
-                <button onclick="showSections()">← Назад</button>
-                <h2>${section.title}</h2>
-                <div class="lessons">
-            `;
-
-        for (const [lessonId, lesson] of Object.entries(section.lessons)) {
-          html += `
-                    <div class="lesson" onclick="showLesson('${lessonId}')">
-                        <h3>${lesson.title}</h3>
-                    </div>
-                `;
+        if (idx === selected && idx !== correct) {
+          opt.classList.add('wrong');
         }
-
-        html += "</div>";
-        app.innerHTML = html;
-      }
-
-      // Показать урок
-      async function showLesson(lessonId) {
-        const sections = await loadData();
-        const lesson = sections[currentSection].lessons[lessonId];
-        currentLesson = lessonId;
-
-        app.innerHTML = `
-                <button onclick="showLessons('${currentSection}')">← Назад</button>
-                <h2>${lesson.title}</h2>
-                <div class="content">${lesson.content}</div>
-                <button onclick="showTask()">Начать задание</button>
-            `;
-      }
-
-      // Показать задание
-      async function showTask() {
-        const sections = await loadData();
-        const task = sections[currentSection].lessons[currentLesson].tasks[0];
-
-        app.innerHTML = `
-                <button onclick="showLesson('${currentLesson}')">← Назад</button>
-                <h3>${task.question}</h3>
-                <div class="options">
-                    ${task.options
-                      .map(
-                        (opt, i) => `
-                        <button onclick="checkAnswer(${i}, ${task.correct})">${opt}</button>
-                    `
-                      )
-                      .join("")}
-                </div>
-            `;
-      }
-
-      // Проверить ответ
-      function checkAnswer(selected, correct) {
+        opt.style.pointerEvents = 'none';
+      });
+      
+      setTimeout(() => {
         if (selected === correct) {
-          alert("✅ Верно!");
+          alert('✅ Правильно! Молодец!');
         } else {
-          alert("❌ Неверно! Попробуйте ещё раз.");
+          alert('❌ Неверно, попробуйте ещё раз');
         }
-      }
+      }, 300);
+    }
 
-      // Запуск приложения
-      document.addEventListener("DOMContentLoaded", showSections);
-    </script>
-  </body>
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', loadSections);
+  </script>
+</body>
 </html>
