@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Путь Питониста</title>
+    <link href="style.css" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="app-header">
+        <h1 class="app-title">🐍 Путь Питониста</h1>
+        <p class="app-subtitle">9 ключевых разделов для освоения Python</p>
+      </div>
+
+      <div id="content">
+        <!-- Контент будет загружаться здесь -->
+      </div>
+    </div>
+
+    <script>
+      // Глобальные переменные
+      const contentDiv = document.getElementById("content");
+      let sectionsData = {};
+      let currentSection = null;
+      let currentLesson = null;
+
+      // Загрузка данных
+      async function loadSections() {
+        const response = await fetch("sections.json");
+        sectionsData = await response.json();
+        renderSections();
+      }
+
+      // Отображение разделов
+      function renderSections() {
+        let html = '<div class="sections-grid">';
+
+        for (const [id, section] of Object.entries(sectionsData)) {
+          html += `
+          <div class="section-card" onclick="showLessons('${id}')">
+            <img src="images/${section.image}" class="section-image" alt="${section.title}">
+            <div class="section-content">
+              <h3 class="section-title">${section.title}</h3>
+              <p class="section-description">${section.description}</p>
+            </div>
+            <div class="section-number">${id}</div>
+          </div>
+        `;
+        }
+
+        html += "</div>";
+        contentDiv.innerHTML = html;
+      }
+
+      // Показать уроки раздела (сохранена ваша оригинальная логика)
+      function showLessons(sectionId) {
+        currentSection = sectionId;
+        const section = sectionsData[sectionId];
+
+        let html = `
+        <button class="btn btn-outline" onclick="renderSections()">
+          ← Все разделы
+        </button>
+        
+        <div class="lesson-container">
+          <div class="lesson-header">
+            <h1 class="lesson-title">${section.title}</h1>
+            <p>${section.description}</p>
+          </div>
+      `;
+
+        // Ваш оригинальный код для отображения уроков
+        for (const [lessonId, lesson] of Object.entries(section.lessons)) {
+          html += `
+          <div class="lesson-card" onclick="showLesson('${lessonId}')">
+            <h3>${lesson.title}</h3>
+            <div class="lesson-preview">${lesson.content.substring(
+              0,
+              100
+            )}...</div>
+          </div>
+        `;
+        }
+
+        html += "</div>";
+        contentDiv.innerHTML = html;
+      }
+
+      // Показать урок (сохранена ваша оригинальная логика)
+      function showLesson(lessonId) {
+        currentLesson = lessonId;
+        const lesson = sectionsData[currentSection].lessons[lessonId];
+
+        const html = `
+        <button class="btn btn-outline" onclick="showLessons('${currentSection}')">
+          ← Назад к разделу
+        </button>
+        
+        <div class="lesson-container">
+          <h1 class="lesson-title">${lesson.title}</h1>
+          
+          ${
+            lesson.image
+              ? `
+            <img src="images/${lesson.image}" class="lesson-image" alt="${lesson.title}">
+          `
+              : ""
+          }
+          
+          <div class="lesson-content">
+            ${lesson.content}
+          </div>
+          
+          <button class="btn" onclick="startTask('${lessonId}')">
+            Начать задание →
+          </button>
+        </div>
+      `;
+
+        contentDiv.innerHTML = html;
+      }
+
+      // Остальные функции (startTask, checkAnswer и т.д.) остаются без изменений
+
+      // Инициализация
+      document.addEventListener("DOMContentLoaded", loadSections);
+    </script>
+  </body>
+</html>
