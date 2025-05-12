@@ -41,7 +41,7 @@
       for (const [id, section] of Object.entries(sectionsData)) {
         html += `
           <div class="section-card" onclick="showLessons('${id}')">
-            <img src="images/${section.image}" class="section-image" alt="${section.title}">
+            <img src="${section.image}" class="section-image" alt="${section.title}">
             <div class="section-content">
               <h3 class="section-title">${section.title}</h3>
               <p class="section-description">${section.description}</p>
