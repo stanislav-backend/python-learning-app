@@ -4,131 +4,242 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Путь Питониста</title>
-    <link href="style.css" rel="stylesheet" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
+    <style>
+      :root {
+        --bg-color: #0f0f1b;
+        --primary: #6df7c7;
+        --secondary: #11f3a2;
+        --accent: #ff2d75;
+        --text: #e0e0e0;
+        --border: #3a3a4a;
+        --pixel-size: 4px;
+      }
+
+      * {
+        box-sizing: border-box;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: pixelated;
+      }
+
+      body {
+        font-family: "Press Start 2P", cursive;
+        background-color: var(--bg-color);
+        color: var(--text);
+        margin: 0;
+        padding: 20px;
+        line-height: 1.6;
+        font-size: 14px;
+      }
+
+      #app {
+        max-width: 1200px;
+        margin: 0 auto;
+        border: var(--pixel-size) solid var(--border);
+        box-shadow: 0 0 0 var(--pixel-size) var(--primary),
+          0 0 0 calc(var(--pixel-size) * 2) var(--accent);
+        padding: 20px;
+        background-color: #1a1a2a;
+      }
+
+      /* Шапка */
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+        text-shadow: 3px 3px 0 var(--border);
+        padding: 10px;
+      }
+
+      .header h1 {
+        font-size: 24px;
+        color: var(--primary);
+        margin-bottom: 15px;
+      }
+
+      .header p {
+        color: var(--secondary);
+        font-size: 12px;
+        margin: 0;
+      }
+
+      /* Сетка разделов */
+      .sections-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+        padding: 10px;
+      }
+
+      /* Карточка раздела */
+      .section-card {
+        background: #252535;
+        border: var(--pixel-size) solid var(--border);
+        position: relative;
+        transition: all 0.2s;
+        overflow: hidden;
+      }
+
+      .section-card:hover {
+        transform: translate(-4px, -4px);
+        box-shadow: 8px 8px 0 var(--accent);
+      }
+
+      .image-container {
+        position: relative;
+        width: 100%;
+        padding-bottom: 66.67%; /* Соотношение 3:2 (853/1280 ≈ 0.666) */
+        overflow: hidden;
+      }
+
+      .section-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        border-bottom: var(--pixel-size) solid var(--border);
+        transition: transform 0.3s ease;
+      }
+
+      /* Для мобильных увеличим высоту */
+      @media (max-width: 768px) {
+        .image-container {
+          padding-bottom: 75%; /* Чуть выше на мобильных */
+        }
+      }
+
+      .section-card:hover .section-image {
+        transform: scale(1.05);
+      }
+
+      .section-content {
+        padding: 15px;
+      }
+
+      .section-title {
+        font-size: 14px;
+        color: var(--primary);
+        margin: 0 0 10px;
+        line-height: 1.4;
+      }
+
+      .section-description {
+        color: var(--text);
+        font-size: 10px;
+        line-height: 1.5;
+        margin-bottom: 15px;
+      }
+
+      .section-number {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: var(--accent);
+        color: #fff;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        border: var(--pixel-size) solid #fff;
+        z-index: 2;
+      }
+
+      /* Адаптивность */
+      @media (max-width: 768px) {
+        body {
+          padding: 10px;
+          font-size: 12px;
+        }
+
+        .header h1 {
+          font-size: 18px;
+        }
+
+        .sections-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .image-container {
+          height: 200px;
+        }
+      }
+    </style>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
   </head>
   <body>
     <div id="app">
-      <div class="app-header">
-        <h1 class="app-title">🐍 Путь Питониста</h1>
-        <p class="app-subtitle">9 ключевых разделов для освоения Python</p>
+      <div class="header">
+        <h1>ПУТЬ ПИТОНИСТА</h1>
+        <p>9 УРОВНЕЙ ДЛЯ МАСТЕРА КОДА</p>
       </div>
 
-      <div id="content">
-        <!-- Контент будет загружаться здесь -->
+      <div id="content" class="sections-grid">
+        <!-- Разделы будут загружены здесь -->
       </div>
     </div>
 
     <script>
-      // Глобальные переменные
-      const contentDiv = document.getElementById("content");
-      let sectionsData = {};
-      let currentSection = null;
-      let currentLesson = null;
-
       // Загрузка данных
       async function loadSections() {
-        const response = await fetch("sections.json");
-        sectionsData = await response.json();
-        renderSections();
+        try {
+          const response = await fetch("sections.json");
+          const sections = await response.json();
+          renderSections(sections);
+        } catch (error) {
+          console.error("Error loading data:", error);
+          document.getElementById("content").innerHTML = `
+          <div style="color: var(--accent); text-align: center; padding: 20px;">
+            ERROR LOADING DATA. TRY AGAIN LATER.
+          </div>
+        `;
+        }
       }
 
       // Отображение разделов
-      function renderSections() {
-        let html = '<div class="sections-grid">';
+      function renderSections(sections) {
+        let html = "";
 
-        for (const [id, section] of Object.entries(sectionsData)) {
+        for (const [id, section] of Object.entries(sections)) {
           html += `
-          <div class="section-card" onclick="showLessons('${id}')">
-            <div class="section-image-container">
-              <img src="${section.image}" class="section-image" alt="${section.title}">
+          <div class="section-card" onclick="showSection('${id}')">
+            <div class="image-container">
+              <img src="${section.image}" class="section-image" alt="${
+            section.title
+          }">
+              <div class="section-number">${id}</div>
             </div>
             <div class="section-content">
-              <h3 class="section-title">${section.title}</h3>
+              <h3 class="section-title">${section.title.toUpperCase()}</h3>
               <p class="section-description">${section.description}</p>
             </div>
-            <div class="section-number">${id}</div>
           </div>
         `;
         }
 
-        html += "</div>";
-        contentDiv.innerHTML = html;
+        document.getElementById("content").innerHTML = html;
       }
 
-      // Показать уроки раздела
-      function showLessons(sectionId) {
-        currentSection = sectionId;
-        const section = sectionsData[sectionId];
-
-        let html = `
-        <button class="btn btn-outline" onclick="renderSections()">
-          ← Все разделы
-        </button>
-        
-        <div class="lesson-container">
-          <div class="lesson-header">
-            <h1 class="lesson-title">${section.title}</h1>
-            <p>${section.description}</p>
-          </div>
-      `;
-
-        for (const [lessonId, lesson] of Object.entries(section.lessons)) {
-          html += `
-          <div class="lesson-card" onclick="showLesson('${lessonId}')">
-            <h3>${lesson.title}</h3>
-            <div class="lesson-preview">${lesson.content.substring(
-              0,
-              100
-            )}...</div>
-          </div>
-        `;
-        }
-
-        html += "</div>";
-        contentDiv.innerHTML = html;
-      }
-
-      // Показать урок
-      function showLesson(lessonId) {
-        currentLesson = lessonId;
-        const lesson = sectionsData[currentSection].lessons[lessonId];
-
-        const html = `
-        <button class="btn btn-outline" onclick="showLessons('${currentSection}')">
-          ← Назад к разделу
-        </button>
-        
-        <div class="lesson-container">
-          <h1 class="lesson-title">${lesson.title}</h1>
-          
-          ${
-            lesson.image
-              ? `
-            <img src="images/${lesson.image}" class="lesson-image" alt="${lesson.title}">
-          `
-              : ""
-          }
-          
-          <div class="lesson-content">
-            ${lesson.content}
-          </div>
-          
-          <button class="btn" onclick="startTask('${lessonId}')">
-            Начать задание →
-          </button>
-        </div>
-      `;
-
-        contentDiv.innerHTML = html;
+      // Показать раздел
+      function showSection(sectionId) {
+        Telegram.WebApp.showAlert(
+          `SELECTED: ${sectionsData[sectionId].title.toUpperCase()}`
+        );
       }
 
       // Инициализация
-      document.addEventListener("DOMContentLoaded", loadSections);
+      let sectionsData = {};
+      document.addEventListener("DOMContentLoaded", async () => {
+        const response = await fetch("sections.json");
+        sectionsData = await response.json();
+        loadSections();
+      });
     </script>
   </body>
 </html>
