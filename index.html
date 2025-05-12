@@ -43,7 +43,6 @@
         background-color: #1a1a2a;
       }
 
-      /* Шапка */
       .header {
         text-align: center;
         margin-bottom: 40px;
@@ -63,7 +62,6 @@
         margin: 0;
       }
 
-      /* Сетка разделов */
       .sections-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -71,13 +69,13 @@
         padding: 10px;
       }
 
-      /* Карточка раздела */
       .section-card {
         background: #252535;
         border: var(--pixel-size) solid var(--border);
         position: relative;
         transition: all 0.2s;
         overflow: hidden;
+        cursor: pointer;
       }
 
       .section-card:hover {
@@ -142,7 +140,6 @@
         z-index: 2;
       }
 
-      /* Кнопки */
       .btn {
         display: inline-block;
         background: var(--primary);
@@ -164,7 +161,20 @@
         box-shadow: 2px 2px 0 #000;
       }
 
-      /* Страница урока */
+      .btn-secondary {
+        background: var(--border);
+        color: var(--text);
+      }
+
+      .btn-check {
+        background: var(--accent);
+        color: white;
+      }
+
+      .btn-next {
+        background: var(--secondary);
+      }
+
       .lesson-container {
         background: #252535;
         border: var(--pixel-size) solid var(--border);
@@ -186,20 +196,50 @@
 
       .lesson-content code {
         background: #3a3a4a;
-        padding: 4px;
+        padding: 10px;
         display: block;
         margin: 10px 0;
         overflow-x: auto;
         white-space: pre;
         font-family: monospace;
+        border-left: 4px solid var(--accent);
       }
 
-      /* Задачи */
+      .lesson-content ul {
+        padding-left: 20px;
+        list-style-type: none;
+      }
+
+      .lesson-content li {
+        margin-bottom: 10px;
+        position: relative;
+        padding-left: 15px;
+      }
+
+      .lesson-content li:before {
+        content: "•";
+        color: var(--accent);
+        position: absolute;
+        left: 0;
+      }
+
       .task {
         background: #3a3a4a;
         border: var(--pixel-size) solid var(--border);
         padding: 15px;
         margin-bottom: 15px;
+      }
+
+      .task-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .task-title {
+        font-size: 14px;
+        color: var(--primary);
       }
 
       .task-question {
@@ -212,6 +252,9 @@
         padding: 10px;
         margin: 10px 0;
         overflow-x: auto;
+        font-family: monospace;
+        white-space: pre;
+        border-radius: 4px;
       }
 
       .task-actions {
@@ -220,16 +263,6 @@
         margin-top: 15px;
       }
 
-      .btn-check {
-        background: var(--accent);
-        color: white;
-      }
-
-      .btn-next {
-        background: var(--secondary);
-      }
-
-      /* Поле ввода */
       .answer-input {
         background: #2a2a3a;
         border: var(--pixel-size) solid var(--border);
@@ -241,7 +274,6 @@
         font-size: 12px;
       }
 
-      /* Результат ответа */
       .answer-result {
         margin-top: 15px;
         padding: 10px;
@@ -258,7 +290,44 @@
         border-color: var(--accent);
       }
 
-      /* Адаптивность */
+      .crystals {
+        display: flex;
+        gap: 5px;
+        margin-top: 10px;
+      }
+
+      .crystal {
+        width: 20px;
+        height: 20px;
+        background-color: var(--accent);
+        clip-path: polygon(
+          50% 0%,
+          60% 40%,
+          100% 50%,
+          60% 60%,
+          50% 100%,
+          40% 60%,
+          0% 50%,
+          40% 40%
+        );
+      }
+
+      .crystal.lost {
+        opacity: 0.3;
+      }
+
+      .progress {
+        margin-top: 15px;
+        font-size: 10px;
+        color: var(--secondary);
+      }
+
+      .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+      }
+
       @media (max-width: 768px) {
         body {
           padding: 10px;
@@ -276,9 +345,18 @@
         .image-container {
           padding-bottom: 75%;
         }
+        .btn-check {
+          background: var(--accent);
+          color: white;
+          margin-top: 10px;
+          width: 100%;
+        }
+
+        .btn-check:hover {
+          background: #e61a5f;
+        }
       }
     </style>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
   </head>
   <body>
     <div id="app">
@@ -293,38 +371,23 @@
     </div>
 
     <script>
-      // Данные разделов
+      // Полные данные всех 9 разделов
       const sectionsData = {
         1: {
           title: "Переменные и print()",
           description: "Основы работы с данными",
           image: "4.jpg",
-          theory: `*Уровень 1: Переменные и print()*\n\n
-🔹 *Переменные* — ярлыки для хранения значений:\n
-\`\`\`python
-x = 5
-name = 'Mario'
-\`\`\`\n\n
-🔹 *Функция print()* — вывод на экран:\n
-\`\`\`python
-print(x)
-\`\`\`\n\n
-🔹 *Арифметика:* \`+\`, \`-\`, \`*\`, \`/\`, \`//\`, \`%\`, \`**\`\n
-\`\`\`python
-print(10 // 3)  # 3
-print(10 % 3)  # 1
-\`\`\`\n\n
-🔹 *Изменение переменных:*\n
-\`\`\`python
-n = 5
-n += 3
-print(n)  # 8
-\`\`\`\n\n
-🔹 *Строки:*\n
-\`\`\`python
-text = 'Hi'
-print(text * 3)  # HiHiHi
-\`\`\``,
+          theory: `*Уровень 1: Переменные и print()*\n\n🔹 *Переменные* — ярлыки для хранения значений:\n\`\`\`python
+      x = 5
+      name = 'Mario'\n\`\`\`\n\n🔹 *Функция print()* — вывод на экран:\n\`\`\`python
+      print(x)\n\`\`\`\n\n🔹 *Арифметика:* \`+\`, \`-\`, \`*\`, \`/\`, \`//\`, \`%\`, \`**\`\n\`\`\`python
+      print(10 // 3)  # 3
+      print(10 % 3)  # 1\n\`\`\`\n\n🔹 *Изменение переменных:*\n\`\`\`python
+      n = 5
+      n += 3
+      print(n)  # 8\n\`\`\`\n\n🔹 *Строки:*\n\`\`\`python
+      text = 'Hi'
+      print(text * 3)  # HiHiHi\n\`\`\``,
           tasks: [
             {
               code: "x = 5\nprint(x)",
@@ -382,26 +445,14 @@ print(text * 3)  # HiHiHi
           title: "Условный оператор if",
           description: "Логические ветвления",
           image: "5.jpg",
-          theory: `*Уровень 2: Условный оператор if*\n\n
-🔹 *Базовый синтаксис:*\n
-\`\`\`python
-if условие:
-    действие
-\`\`\`\n\n
-🔹 *Пример:*\n
-\`\`\`python
-age = 18
-if age >= 18:
-    print("Доступ разрешен")
-\`\`\`\n\n
-🔹 *Операторы сравнения:*\n
-\`>\`, \`<\`, \`>=\`, \`<=\`, \`==\`, \`!=\`\n\n
-🔹 *Логические операторы:*\n
-\`and\`, \`or\`, \`not\`\n
-\`\`\`python
-if x > 0 and x < 10:
-    print("Число от 1 до 9")
-\`\`\``,
+          theory: `*Уровень 2: Условный оператор if*\n\n🔹 *Базовый синтаксис:*\n\`\`\`python
+      if условие:
+          действие\n\`\`\`\n\n🔹 *Пример:*\n\`\`\`python
+      age = 18
+      if age >= 18:
+          print("Доступ разрешен")\n\`\`\`\n\n🔹 *Операторы сравнения:*\n\`>\`, \`<\`, \`>=\`, \`<=\`, \`==\`, \`!=\`\n\n🔹 *Логические операторы:*\n\`and\`, \`or\`, \`not\`\n\`\`\`python
+      if x > 0 and x < 10:
+          print("Число от 1 до 9")\n\`\`\``,
           tasks: [
             {
               code: "x = 5\nif x > 3:\n    print('Да')",
@@ -459,36 +510,26 @@ if x > 0 and x < 10:
           title: "Каскадный elif, else",
           description: "Множественные условия",
           image: "6.jpg",
-          theory: `*Уровень 3: Каскадный elif, else*\n\n
-🔹 *Множественные условия:*\n
-\`\`\`python
-if условие1:
-    действие1
-elif условие2:
-    действие2
-else:
-    действие3
-\`\`\`\n\n
-🔹 *Пример:*\n
-\`\`\`python
-grade = 85
-if grade >= 90:
-    print('A')
-elif grade >= 80:
-    print('B')
-elif grade >= 70:
-    print('C')
-else:
-    print('D')
-\`\`\`\n\n
-🔹 *Порядок проверки:* условия проверяются сверху вниз, выполняется только первый подходящий блок.\n\n
-🔹 *Else без elif:*\n
-\`\`\`python
-if x > 0:
-    print('+')
-else:
-    print('-')
-\`\`\``,
+          theory: `*Уровень 3: Каскадный elif, else*\n\n🔹 *Множественные условия:*\n\`\`\`python
+      if условие1:
+          действие1
+      elif условие2:
+          действие2
+      else:
+          действие3\n\`\`\`\n\n🔹 *Пример:*\n\`\`\`python
+      grade = 85
+      if grade >= 90:
+          print('A')
+      elif grade >= 80:
+          print('B')
+      elif grade >= 70:
+          print('C')
+      else:
+          print('D')\n\`\`\`\n\n🔹 *Порядок проверки:* условия проверяются сверху вниз, выполняется только первый подходящий блок.\n\n🔹 *Else без elif:*\n\`\`\`python
+      if x > 0:
+          print('+')
+      else:
+          print('-')\n\`\`\``,
           tasks: [
             {
               code: "x = 0\nif x > 0:\n    print('+')\nelif x < 0:\n    print('-')\nelse:\n    print('0')",
@@ -546,29 +587,17 @@ else:
           title: "Цикл for",
           description: "Итерации по последовательностям",
           image: "7.jpg",
-          theory: `*Уровень 4: Цикл for*\n\n
-🔹 *Базовый синтаксис:*\n
-\`\`\`python
-for переменная in последовательность:
-    действия
-\`\`\`\n\n
-🔹 *Функция range():*\n
-\`\`\`python
-for i in range(5):     # 0,1,2,3,4
-for i in range(1,6):   # 1,2,3,4,5
-for i in range(0,10,2): # 0,2,4,6,8
-\`\`\`\n\n
-🔹 *Итерация по строке:*\n
-\`\`\`python
-for char in 'Hello':
-    print(char)
-\`\`\`\n\n
-🔹 *Вложенные циклы:*\n
-\`\`\`python
-for i in range(3):
-    for j in range(2):
-        print(i, j)
-\`\`\``,
+          theory: `*Уровень 4: Цикл for*\n\n🔹 *Базовый синтаксис:*\n\`\`\`python
+      for переменная in последовательность:
+          действия\n\`\`\`\n\n🔹 *Функция range():*\n\`\`\`python
+      for i in range(5):     # 0,1,2,3,4
+      for i in range(1,6):   # 1,2,3,4,5
+      for i in range(0,10,2): # 0,2,4,6,8\n\`\`\`\n\n🔹 *Итерация по строке:*\n\`\`\`python
+      for char in 'Hello':
+          print(char)\n\`\`\`\n\n🔹 *Вложенные циклы:*\n\`\`\`python
+      for i in range(3):
+          for j in range(2):
+              print(i, j)\n\`\`\``,
           tasks: [
             {
               code: "for i in range(3):\n    print(i)",
@@ -626,35 +655,23 @@ for i in range(3):
           title: "Цикл while",
           description: "Циклы с условием",
           image: "8.jpg",
-          theory: `*Уровень 5: Цикл while*\n\n
-🔹 *Базовый синтаксис:*\n
-\`\`\`python
-while условие:
-    действия
-\`\`\`\n\n
-🔹 *Пример:*\n
-\`\`\`python
-count = 0
-while count < 5:
-    print(count)
-    count += 1
-\`\`\`\n\n
-🔹 *Бесконечный цикл:*\n
-\`\`\`python
-while True:
-    print('Бесконечность')
-    break  # для остановки
-\`\`\`\n\n
-🔹 *Break и continue:*\n
-\`\`\`python
-while True:
-    answer = input('Введите stop: ')
-    if answer == 'stop':
-        break
-    if len(answer) < 3:
-        continue
-    print('Слишком коротко')
-\`\`\``,
+          theory: `*Уровень 5: Цикл while*\n\n🔹 *Базовый синтаксис:*\n\`\`\`python
+      while условие:
+          действия\n\`\`\`\n\n🔹 *Пример:*\n\`\`\`python
+      count = 0
+      while count < 5:
+          print(count)
+          count += 1\n\`\`\`\n\n🔹 *Бесконечный цикл:*\n\`\`\`python
+      while True:
+          print('Бесконечность')
+          break  # для остановки\n\`\`\`\n\n🔹 *Break и continue:*\n\`\`\`python
+      while True:
+          answer = input('Введите stop: ')
+          if answer == 'stop':
+              break
+          if len(answer) < 3:
+              continue
+          print('Слишком коротко')\n\`\`\``,
           tasks: [
             {
               code: "count = 0\nwhile count < 3:\n    print(count)\n    count += 1",
@@ -712,37 +729,25 @@ while True:
           title: "Вложенные циклы",
           description: "Циклы внутри циклов",
           image: "9.jpg",
-          theory: `*Уровень 6: Вложенные циклы*\n\n
-🔹 *Базовый пример:*\n
-\`\`\`python
-for i in range(3):
-    for j in range(2):
-        print(i, j)
-\`\`\`\n\n
-🔹 *Таблица умножения:*\n
-\`\`\`python
-for i in range(1, 4):
-    for j in range(1, 4):
-        print(f'{i}*{j}={i*j}')
-\`\`\`\n\n
-🔹 *Вложенные while:*\n
-\`\`\`python
-i = 1
-while i <= 2:
-    j = 1
-    while j <= 3:
-        print(i, j)
-        j += 1
-    i += 1
-\`\`\`\n\n
-🔹 *Break во вложенных циклах:*\n
-\`\`\`python
-for i in range(3):
-    for j in range(3):
-        if j == 1:
-            break
-        print(i, j)
-\`\`\``,
+          theory: `*Уровень 6: Вложенные циклы*\n\n🔹 *Базовый пример:*\n\`\`\`python
+      for i in range(3):
+          for j in range(2):
+              print(i, j)\n\`\`\`\n\n🔹 *Таблица умножения:*\n\`\`\`python
+      for i in range(1, 4):
+          for j in range(1, 4):
+              print(f'{i}*{j}={i*j}')\n\`\`\`\n\n🔹 *Вложенные while:*\n\`\`\`python
+      i = 1
+      while i <= 2:
+          j = 1
+          while j <= 3:
+              print(i, j)
+              j += 1
+          i += 1\n\`\`\`\n\n🔹 *Break во вложенных циклах:*\n\`\`\`python
+      for i in range(3):
+          for j in range(3):
+              if j == 1:
+                  break
+              print(i, j)\n\`\`\``,
           tasks: [
             {
               code: "for i in range(2):\n    for j in range(2):\n        print(i, j)",
@@ -800,31 +805,19 @@ for i in range(3):
           title: "Строки",
           description: "Индексация, срезы, методы",
           image: "10.jpg",
-          theory: `*Уровень 7: Строки*\n\n
-🔹 *Индексация:*\n
-\`\`\`python
-s = 'Python'
-print(s[0])  # 'P'
-print(s[-1]) # 'n'
-\`\`\`\n\n
-🔹 *Срезы:*\n
-\`\`\`python
-print(s[1:4]) # 'yth'
-print(s[:3])  # 'Pyt'
-print(s[3:])  # 'hon'
-\`\`\`\n\n
-🔹 *Методы строк:*\n
-\`\`\`python
-print(s.upper())    # 'PYTHON'
-print('HELLO'.lower()) # 'hello'
-print('abc'.replace('b', 'x')) # 'axc'
-print('a,b,c'.split(',')) # ['a', 'b', 'c']
-\`\`\`\n\n
-🔹 *Форматирование:*\n
-\`\`\`python
-name = 'Alice'
-print(f'Hello, {name}!') # 'Hello, Alice!'
-\`\`\``,
+          theory: `*Уровень 7: Строки*\n\n🔹 *Индексация:*\n\`\`\`python
+      s = 'Python'
+      print(s[0])  # 'P'
+      print(s[-1]) # 'n'\n\`\`\`\n\n🔹 *Срезы:*\n\`\`\`python
+      print(s[1:4]) # 'yth'
+      print(s[:3])  # 'Pyt'
+      print(s[3:])  # 'hon'\n\`\`\`\n\n🔹 *Методы строк:*\n\`\`\`python
+      print(s.upper())    # 'PYTHON'
+      print('HELLO'.lower()) # 'hello'
+      print('abc'.replace('b', 'x')) # 'axc'
+      print('a,b,c'.split(',')) # ['a', 'b', 'c']\n\`\`\`\n\n🔹 *Форматирование:*\n\`\`\`python
+      name = 'Alice'
+      print(f'Hello, {name}!') # 'Hello, Alice!'\n\`\`\``,
           tasks: [
             {
               code: "s = 'Python'\nprint(s[0])",
@@ -882,29 +875,17 @@ print(f'Hello, {name}!') # 'Hello, Alice!'
           title: "Списки",
           description: "Работа с коллекциями",
           image: "11.jpg",
-          theory: `*Уровень 8: Списки*\n\n
-🔹 *Создание списка:*\n
-\`\`\`python
-nums = [1, 2, 3]
-words = ['hello', 'world']
-mixed = [1, 'two', 3.0]
-\`\`\`\n\n
-🔹 *Операции со списками:*\n
-\`\`\`python
-nums.append(4)      # [1,2,3,4]
-nums.insert(1, 5)   # [1,5,2,3,4]
-nums.remove(2)      # [1,5,3,4]
-nums.pop()          # [1,5,3]
-\`\`\`\n\n
-🔹 *Срезы списков:*\n
-\`\`\`python
-print(nums[1:3])    # [5,3]
-print(nums[::-1])   # [3,5,1]
-\`\`\`\n\n
-🔹 *Списочные выражения:*\n
-\`\`\`python
-squares = [x**2 for x in range(5)] # [0,1,4,9,16]
-\`\`\``,
+          theory: `*Уровень 8: Списки*\n\n🔹 *Создание списка:*\n\`\`\`python
+      nums = [1, 2, 3]
+      words = ['hello', 'world']
+      mixed = [1, 'two', 3.0]\n\`\`\`\n\n🔹 *Операции со списками:*\n\`\`\`python
+      nums.append(4)      # [1,2,3,4]
+      nums.insert(1, 5)   # [1,5,2,3,4]
+      nums.remove(2)      # [1,5,3,4]
+      nums.pop()          # [1,5,3]\n\`\`\`\n\n🔹 *Срезы списков:*\n\`\`\`python
+      print(nums[1:3])    # [5,3]
+      print(nums[::-1])   # [3,5,1]\n\`\`\`\n\n🔹 *Списочные выражения:*\n\`\`\`python
+      squares = [x**2 for x in range(5)] # [0,1,4,9,16]\n\`\`\``,
           tasks: [
             {
               code: "nums = [1, 2, 3]\nprint(nums[1])",
@@ -962,29 +943,17 @@ squares = [x**2 for x in range(5)] # [0,1,4,9,16]
           title: "Функции",
           description: "Создание и вызов функций",
           image: "12.jpg",
-          theory: `*Уровень 9: Функции*\n\n
-🔹 *Определение функции:*\n
-\`\`\`python
-def greet(name):
-    return f'Hello, {name}!'
-\`\`\`\n\n
-🔹 *Вызов функции:*\n
-\`\`\`python
-print(greet('Alice')) # 'Hello, Alice!'
-\`\`\`\n\n
-🔹 *Параметры по умолчанию:*\n
-\`\`\`python
-def power(x, n=2):
-    return x ** n
-print(power(3))   # 9
-print(power(3,3)) # 27
-\`\`\`\n\n
-🔹 *Рекурсия:*\n
-\`\`\`python
-def factorial(n):
-    return 1 if n == 0 else n * factorial(n-1)
-print(factorial(5)) # 120
-\`\`\``,
+          theory: `*Уровень 9: Функции*\n\n🔹 *Определение функции:*\n\`\`\`python
+      def greet(name):
+          return f'Hello, {name}!'\n\`\`\`\n\n🔹 *Вызов функции:*\n\`\`\`python
+      print(greet('Alice')) # 'Hello, Alice!'\n\`\`\`\n\n🔹 *Параметры по умолчанию:*\n\`\`\`python
+      def power(x, n=2):
+          return x ** n
+      print(power(3))   # 9
+      print(power(3,3)) # 27\n\`\`\`\n\n🔹 *Рекурсия:*\n\`\`\`python
+      def factorial(n):
+          return 1 if n == 0 else n * factorial(n-1)
+      print(factorial(5)) # 120\n\`\`\``,
           tasks: [
             {
               code: "def add(a, b):\n    return a + b\nprint(add(2, 3))",
@@ -1040,30 +1009,72 @@ print(factorial(5)) # 120
         },
       };
 
-      // Текущее состояние
+      // Состояние пользователя
+      let userProgress =
+        JSON.parse(localStorage.getItem("pythonPathProgress")) || {};
       let currentSection = null;
       let currentTaskIndex = 0;
+      let attemptsLeft = 3;
+      let currentAnswer = "";
+
+      // Инициализация прогресса
+      function initProgress() {
+        for (const sectionId in sectionsData) {
+          if (!userProgress[sectionId]) {
+            userProgress[sectionId] = {
+              solved: 0,
+              total: sectionsData[sectionId].tasks.length,
+              completedTasks: [],
+            };
+          }
+        }
+        saveProgress();
+      }
+
+      // Сохранение прогресса
+      function saveProgress() {
+        localStorage.setItem(
+          "pythonPathProgress",
+          JSON.stringify(userProgress)
+        );
+      }
 
       // Загрузка разделов
       function loadSections() {
+        initProgress();
+
         let html = '<div class="sections-grid">';
 
         for (const [id, section] of Object.entries(sectionsData)) {
+          const progress = userProgress[id];
+          const progressText = `${progress.solved}/${progress.total}`;
+          const progressPercent = Math.round(
+            (progress.solved / progress.total) * 100
+          );
+
           html += `
-          <div class="section-card" onclick="showSection('${id}')">
-            <div class="image-container">
-              <img src="${section.image}" class="section-image" alt="${
-            section.title
-          }">
-              <div class="section-number">${id}</div>
-            </div>
-            <div class="section-content">
-              <h3 class="section-title">${section.title.toUpperCase()}</h3>
-              <p class="section-description">${section.description}</p>
-              <button class="btn">СТАРТ</button>
-            </div>
-          </div>
-        `;
+                      <div class="section-card" onclick="showSection('${id}')">
+                          <div class="image-container">
+                              <img src="${
+                                section.image
+                              }" class="section-image" alt="${section.title}">
+                              <div class="section-number">${id}</div>
+                          </div>
+                          <div class="section-content">
+                              <h3 class="section-title">${section.title.toUpperCase()}</h3>
+                              <p class="section-description">${
+                                section.description
+                              }</p>
+                              <div class="progress">
+                                  <div style="width: 100%; background: #3a3a4a; border-radius: 4px;">
+                                      <div style="width: ${progressPercent}%; background: var(--secondary); height: 6px; border-radius: 4px;"></div>
+                                  </div>
+                                  Решено: ${progressText} (${progressPercent}%)
+                              </div>
+                              <button class="btn">СТАРТ</button>
+                          </div>
+                      </div>
+                      `;
         }
 
         html += "</div>";
@@ -1074,19 +1085,32 @@ print(factorial(5)) # 120
       function showSection(sectionId) {
         currentSection = sectionId;
         const section = sectionsData[sectionId];
+        const progress = userProgress[sectionId];
 
         let html = `
-        <button class="btn" onclick="loadSections()">← НАЗАД</button>
-        <div class="lesson-container">
-          <h2 class="lesson-title">${section.title.toUpperCase()}</h2>
-          <div class="lesson-content">
-            ${formatTheory(section.theory)}
-          </div>
-          <button class="btn btn-next" onclick="startTasks('${sectionId}')">
-            НАЧАТЬ ЗАДАЧИ →
-          </button>
-        </div>
-      `;
+                  <div class="nav-buttons">
+                      <button class="btn" onclick="loadSections()">← НАЗАД К РАЗДЕЛАМ</button>
+                  </div>
+                  <div class="lesson-container">
+                      <h2 class="lesson-title">${section.title.toUpperCase()}</h2>
+                      <div class="progress">
+                          <div style="width: 100%; background: #3a3a4a; border-radius: 4px;">
+                              <div style="width: ${Math.round(
+                                (progress.solved / progress.total) * 100
+                              )}%; background: var(--secondary); height: 6px; border-radius: 4px;"></div>
+                          </div>
+                          Решено: ${progress.solved}/${
+          progress.total
+        } (${Math.round((progress.solved / progress.total) * 100)}%)
+                      </div>
+                      <div class="lesson-content">
+                          ${formatTheory(section.theory)}
+                      </div>
+                      <button class="btn btn-next" onclick="startTasks('${sectionId}')">
+                          НАЧАТЬ ЗАДАЧИ →
+                      </button>
+                  </div>
+                  `;
 
         document.getElementById("content").innerHTML = html;
       }
@@ -1096,42 +1120,88 @@ print(factorial(5)) # 120
         return text
           .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
           .replace(/\n/g, "<br>")
-          .replace(/```python\n([\s\S]*?)```/g, "<code>$1</code>");
+          .replace(/```python\n([\s\S]*?)```/g, "<code>$1</code>")
+          .replace(/🔹 \*(.*?):\*/g, "<br><strong>$1:</strong>");
       }
 
       // Начать задачи
       function startTasks(sectionId) {
         currentSection = sectionId;
         currentTaskIndex = 0;
+        attemptsLeft = 3;
+        currentAnswer = "";
         showTask();
       }
 
       // Показать задачу
       function showTask() {
         const task = sectionsData[currentSection].tasks[currentTaskIndex];
+        const progress = userProgress[currentSection];
+        const isCompleted = progress.completedTasks.includes(currentTaskIndex);
 
         let html = `
-        <button class="btn" onclick="showSection('${currentSection}')">← ТЕОРИЯ</button>
-        <div class="task">
-          <h3>ЗАДАЧА ${currentTaskIndex + 1}/${
-          sectionsData[currentSection].tasks.length
-        }</h3>
-          <div class="task-question">Что выведет этот код?</div>
-          <div class="task-code">
-            <pre>${task.code}</pre>
-          </div>
-          <input type="text" class="answer-input" id="user-answer" placeholder="Введите ответ" onkeyup="checkAnswerOnEnter(event)">
-          <div class="answer-result" id="answer-result"></div>
-        </div>
-      `;
+                  <div class="nav-buttons">
+                      <button class="btn" onclick="showSection('${currentSection}')">← ТЕОРИЯ</button>
+                      ${
+                        currentTaskIndex > 0
+                          ? `<button class="btn btn-secondary" onclick="prevTask()">← ПРЕДЫДУЩАЯ</button>`
+                          : ""
+                      }
+                  </div>
+                  <div class="task">
+                      <div class="task-header">
+                          <h3 class="task-title">ЗАДАЧА ${
+                            currentTaskIndex + 1
+                          }/${sectionsData[currentSection].tasks.length}</h3>
+                          <div class="progress">Решено: ${progress.solved}/${
+          progress.total
+        }</div>
+                      </div>
+                      ${
+                        isCompleted
+                          ? '<div style="color: var(--secondary); font-size: 10px; margin-bottom: 10px;">✓ Вы уже решили эту задачу</div>'
+                          : ""
+                      }
+                      <div class="crystals">
+                          ${Array(3)
+                            .fill()
+                            .map(
+                              (_, i) =>
+                                `<div class="crystal ${
+                                  i >= attemptsLeft ? "lost" : ""
+                                }"></div>`
+                            )
+                            .join("")}
+                      </div>
+                      <div class="task-question">Что выведет этот код?</div>
+                      <div class="task-code">
+                          <pre>${task.code}</pre>
+                      </div>
+                      <input type="text" class="answer-input" id="user-answer" placeholder="Введите ответ" value="${currentAnswer}" onkeyup="checkAnswerOnEnter(event)">
+                      <button class="btn btn-check" onclick="checkAnswer()">ОТВЕТИТЬ</button>
+                      <div class="answer-result" id="answer-result">
+              </div>
+                  `;
 
         document.getElementById("content").innerHTML = html;
         document.getElementById("user-answer").focus();
       }
 
+      // Предыдущая задача
+      function prevTask() {
+        if (currentTaskIndex > 0) {
+          currentTaskIndex--;
+          attemptsLeft = 3;
+          currentAnswer = "";
+          showTask();
+        }
+      }
+
       // Проверить ответ при нажатии Enter
       function checkAnswerOnEnter(event) {
+        currentAnswer = document.getElementById("user-answer").value;
         if (event.key === "Enter") {
+          event.preventDefault();
           checkAnswer();
         }
       }
@@ -1141,37 +1211,95 @@ print(factorial(5)) # 120
         const task = sectionsData[currentSection].tasks[currentTaskIndex];
         const userAnswer = document.getElementById("user-answer").value.trim();
         const resultDiv = document.getElementById("answer-result");
+        const progress = userProgress[currentSection];
+
+        if (!userAnswer) {
+          resultDiv.innerHTML = `
+                  <div style="background:#3a3a4a; padding:10px; border:2px solid var(--accent)">
+                    Пожалуйста, введите ответ!
+                  </div>
+                `;
+          resultDiv.style.display = "block";
+          return;
+        }
 
         const normalizedUserAnswer = userAnswer.replace(/\s+/g, " ");
         const normalizedCorrectAnswer = task.answer.replace(/\s+/g, " ");
 
         const isCorrect = normalizedUserAnswer === normalizedCorrectAnswer;
 
+        if (!isCorrect) {
+          attemptsLeft--;
+
+          if (attemptsLeft > 0) {
+            resultDiv.innerHTML = `
+                              <div style="background:#3a3a4a; padding:10px; border:2px solid var(--accent)">
+                                  <strong>Неправильно!</strong> Осталось попыток: ${attemptsLeft}
+                              </div>
+                          `;
+            resultDiv.style.display = "block";
+
+            // Обновляем кристаллы
+            const crystals = document.querySelectorAll(".crystal");
+            crystals.forEach((crystal, i) => {
+              if (i >= attemptsLeft) {
+                crystal.classList.add("lost");
+              }
+            });
+
+            return;
+          }
+        }
+
+        // Если ответ правильный или закончились попытки
+        if (isCorrect && !progress.completedTasks.includes(currentTaskIndex)) {
+          // Обновляем прогресс только если задача еще не была решена
+          progress.solved++;
+          progress.completedTasks.push(currentTaskIndex);
+          saveProgress();
+        }
+
         resultDiv.innerHTML = `
-          <div style="background:#3a3a4a; padding:10px; border:2px solid ${
-            isCorrect ? "#6df7c7" : "#ff2d75"
-          }">
-            <strong>${isCorrect ? "Правильно!" : "Неправильно"}</strong><br>
-            <strong>Ваш ответ:</strong> ${userAnswer || "—"}<br>
-            <strong>Правильный ответ:</strong> ${task.answer}<br>
-            ${task.explanation ? `<em>${task.explanation}</em>` : ""}
-          </div>
-          <button class="btn btn-next" onclick="nextTask()" style="margin-top:10px;">
-            ${
-              currentTaskIndex < sectionsData[currentSection].tasks.length - 1
-                ? "СЛЕДУЮЩАЯ →"
-                : "ЗАВЕРШИТЬ"
-            }
-          </button>
-        `;
+                      <div style="background:#3a3a4a; padding:10px; border:2px solid ${
+                        isCorrect ? "var(--secondary)" : "var(--accent)"
+                      }">
+                          <strong>${
+                            isCorrect ? "Правильно!" : "Попытки закончились"
+                          }</strong><br>
+                          <strong>Ваш ответ:</strong> ${userAnswer || "—"}<br>
+                          <strong>Правильный ответ:</strong> ${task.answer}<br>
+                          ${
+                            task.explanation
+                              ? `<em>${task.explanation}</em>`
+                              : ""
+                          }
+                      </div>
+                      <div style="display: flex; gap: 10px; margin-top: 10px;">
+                          ${
+                            currentTaskIndex > 0
+                              ? '<button class="btn btn-secondary" onclick="prevTask()">← ПРЕДЫДУЩАЯ</button>'
+                              : ""
+                          }
+                          <button class="btn btn-next" onclick="nextTask()">
+                              ${
+                                currentTaskIndex <
+                                sectionsData[currentSection].tasks.length - 1
+                                  ? "СЛЕДУЮЩАЯ →"
+                                  : "ЗАВЕРШИТЬ"
+                              }
+                          </button>
+                      </div>
+                  `;
 
         resultDiv.style.display = "block";
       }
 
       // Следующая задача
       function nextTask() {
-        currentTaskIndex++;
-        if (currentTaskIndex < sectionsData[currentSection].tasks.length) {
+        if (currentTaskIndex < sectionsData[currentSection].tasks.length - 1) {
+          currentTaskIndex++;
+          attemptsLeft = 3;
+          currentAnswer = "";
           showTask();
         } else {
           showSection(currentSection);
@@ -1180,6 +1308,15 @@ print(factorial(5)) # 120
 
       // Инициализация
       document.addEventListener("DOMContentLoaded", loadSections);
+
+      // Глобальные функции для вызова из HTML
+      window.loadSections = loadSections;
+      window.showSection = showSection;
+      window.startTasks = startTasks;
+      window.prevTask = prevTask;
+      window.nextTask = nextTask;
+      window.checkAnswer = checkAnswer;
+      window.checkAnswerOnEnter = checkAnswerOnEnter;
     </script>
   </body>
 </html>
