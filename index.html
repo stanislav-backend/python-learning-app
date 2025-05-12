@@ -138,6 +138,12 @@
         font-size: 14px;
         border: var(--pixel-size) solid #fff;
         z-index: 2;
+        /* Убираем старые стили */
+        top: auto;
+        /* Добавляем тень для лучшей читаемости */
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+        /* Скругление углов */
+        border-radius: 50%;
       }
 
       .btn {
@@ -355,6 +361,69 @@
         .btn-check:hover {
           background: #e61a5f;
         }
+
+        .lesson-content h3 {
+          color: var(--primary);
+          font-size: 14px;
+          margin: 20px 0 10px;
+          border-bottom: 2px solid var(--accent);
+          padding-bottom: 5px;
+        }
+
+        .lesson-content ul {
+          list-style-type: none;
+          padding-left: 20px;
+          margin: 10px 0;
+        }
+
+        .lesson-content li {
+          margin-bottom: 8px;
+          position: relative;
+          padding-left: 25px;
+        }
+
+        .lesson-content li .bullet {
+          color: var(--accent);
+          position: absolute;
+          left: 0;
+          font-weight: bold;
+        }
+
+        .lesson-content pre {
+          background: #2a2a3a;
+          padding: 12px;
+          border-radius: 4px;
+          overflow-x: auto;
+          margin: 15px 0;
+          border-left: 4px solid var(--accent);
+        }
+
+        .lesson-content code {
+          font-family: "Courier New", monospace;
+          font-size: 12px;
+          color: var(--primary);
+        }
+
+        .lesson-content strong {
+          color: var(--primary);
+        }
+
+        .section-card {
+          position: relative;
+          /* Остальные стили остаются прежними */
+        }
+
+        .section-content {
+          position: relative;
+          padding: 15px;
+          padding-bottom: 40px; /* Добавляем место для номера */
+          /* Остальные стили остаются прежними */
+        }
+
+        /* Убираем z-index у изображения если он был */
+        .section-image {
+          z-index: 1;
+        }
       }
     </style>
   </head>
@@ -374,10 +443,10 @@
       // Полные данные всех 9 разделов
       const sectionsData = {
         1: {
-          title: "Переменные и print()",
+          title: "Переменные и типы данных",
           description: "Основы работы с данными",
           image: "4.jpg",
-          theory: `*Уровень 1: Переменные и print()*\n\n🔹 *Переменные* — ярлыки для хранения значений:\n\`\`\`python
+          theory: `*Уровень 1: Переменные и типы данных*\n\n🔹 *Переменные* — ярлыки для хранения значений:\n\`\`\`python
       x = 5
       name = 'Mario'\n\`\`\`\n\n🔹 *Функция print()* — вывод на экран:\n\`\`\`python
       print(x)\n\`\`\`\n\n🔹 *Арифметика:* \`+\`, \`-\`, \`*\`, \`/\`, \`//\`, \`%\`, \`**\`\n\`\`\`python
@@ -507,10 +576,10 @@
           ],
         },
         3: {
-          title: "Каскадный elif, else",
+          title: "Каскадный оператор elif, else",
           description: "Множественные условия",
           image: "6.jpg",
-          theory: `*Уровень 3: Каскадный elif, else*\n\n🔹 *Множественные условия:*\n\`\`\`python
+          theory: `*Уровень 3: Каскадный оператор elif, else*\n\n🔹 *Множественные условия:*\n\`\`\`python
       if условие1:
           действие1
       elif условие2:
@@ -1047,34 +1116,29 @@
 
         for (const [id, section] of Object.entries(sectionsData)) {
           const progress = userProgress[id];
-          const progressText = `${progress.solved}/${progress.total}`;
+          const progressText = `${progress.solved}/${
+            progress.total
+          } (${Math.round((progress.solved / progress.total) * 100)}%)`;
           const progressPercent = Math.round(
             (progress.solved / progress.total) * 100
           );
 
           html += `
-                      <div class="section-card" onclick="showSection('${id}')">
-                          <div class="image-container">
-                              <img src="${
-                                section.image
-                              }" class="section-image" alt="${section.title}">
-                              <div class="section-number">${id}</div>
-                          </div>
-                          <div class="section-content">
-                              <h3 class="section-title">${section.title.toUpperCase()}</h3>
-                              <p class="section-description">${
-                                section.description
-                              }</p>
-                              <div class="progress">
-                                  <div style="width: 100%; background: #3a3a4a; border-radius: 4px;">
-                                      <div style="width: ${progressPercent}%; background: var(--secondary); height: 6px; border-radius: 4px;"></div>
-                                  </div>
-                                  Решено: ${progressText} (${progressPercent}%)
-                              </div>
-                              <button class="btn">СТАРТ</button>
-                          </div>
-                      </div>
-                      `;
+            <div class="section-card" onclick="showSection('${id}')">
+                <div class="image-container">
+                    <img src="images/${
+                      section.image
+                    }" class="section-image" alt="${section.title}">
+                </div>
+                <div class="section-content">
+                    <h3 class="section-title">${section.title.toUpperCase()}</h3>
+                    <p class="section-description">${section.description}</p>
+                    <div class="progress">Решено: ${progressText}</div>
+                    <button class="btn">СТАРТ</button>
+                    <div class="section-number">${id}</div>
+                </div>
+            </div>
+            `;
         }
 
         html += "</div>";
@@ -1117,11 +1181,41 @@
 
       // Форматирование теории
       function formatTheory(text) {
-        return text
-          .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-          .replace(/\n/g, "<br>")
-          .replace(/```python\n([\s\S]*?)```/g, "<code>$1</code>")
-          .replace(/🔹 \*(.*?):\*/g, "<br><strong>$1:</strong>");
+        // Заменяем **текст** на <strong>текст</strong>
+        text = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+        // Обрабатываем блоки кода с ```python
+        text = text.replace(
+          /```python\n([\s\S]*?)```/g,
+          function (match, code) {
+            // Удаляем лишние пробелы в начале каждой строки кода
+            code = code.replace(/^\s+/gm, "");
+            return `<pre><code class="python">${code.trim()}</code></pre>`;
+          }
+        );
+
+        // Обрабатываем обычные переносы строк
+        text = text.replace(/\n/g, "<br>");
+
+        // Обрабатываем маркированные списки
+        text = text.replace(/🔹 (.*?)(<br>|$)/g, "<li>$1</li>");
+        text = text.replace(
+          /<li>(.*?)<\/li>/g,
+          '<li><span class="bullet">•</span>$1</li>'
+        );
+
+        // Оборачиваем списки в <ul>
+        text = text.replace(/(<li>.*?<\/li>)+/g, function (match) {
+          return `<ul>${match}</ul>`;
+        });
+
+        // Обрабатываем заголовки уровней
+        text = text.replace(
+          /\*Уровень (\d+): (.*?)\*/g,
+          "<h3>Уровень $1: $2</h3>"
+        );
+
+        return text;
       }
 
       // Начать задачи
