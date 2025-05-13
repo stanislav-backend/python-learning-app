@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Путь Питониста</title>
+    <title>Путь Пайтика</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
       rel="stylesheet"
@@ -302,26 +302,6 @@
         margin-top: 10px;
       }
 
-      .crystal {
-        width: 20px;
-        height: 20px;
-        background-color: var(--accent);
-        clip-path: polygon(
-          50% 0%,
-          60% 40%,
-          100% 50%,
-          60% 60%,
-          50% 100%,
-          40% 60%,
-          0% 50%,
-          40% 40%
-        );
-      }
-
-      .crystal.lost {
-        opacity: 0.3;
-      }
-
       .progress {
         margin-top: 15px;
         font-size: 10px;
@@ -332,6 +312,148 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 15px;
+      }
+
+      .section-card {
+        position: relative;
+        /* Остальные стили остаются прежними */
+      }
+
+      .section-content {
+        position: relative;
+        padding: 15px;
+        padding-bottom: 40px; /* Добавляем место для номера */
+        /* Остальные стили остаются прежними */
+      }
+
+      /* Убираем z-index у изображения если он был */
+      .section-image {
+        z-index: 1;
+      }
+
+      .sections-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+        padding: 10px;
+        position: relative;
+      }
+
+      /* Для последнего раздела (10-го) */
+      .section-card:last-child {
+        grid-column: 1 / -1;
+        max-width: 300px;
+        margin: 0 auto;
+      }
+
+      .crystals {
+        display: flex;
+        gap: 4px;
+        margin-top: 10px;
+        image-rendering: pixelated;
+      }
+
+      .crystal {
+        width: 16px;
+        height: 16px;
+        background-color: var(--accent);
+        position: relative;
+        /* Чистый пиксельный ромб */
+        clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        /* Двойная граница для объема */
+        box-shadow: 0 0 0 1px var(--border), 0 0 0 2px rgba(0, 0, 0, 0.3);
+        transform: rotate(45deg);
+      }
+
+      .crystal.lost {
+        opacity: 0.5;
+        filter: brightness(0.7) saturate(0.5);
+      }
+
+      @keyframes pixelBounce {
+        0% {
+          transform: rotate(45deg) translateY(0);
+        }
+        50% {
+          transform: rotate(45deg) translateY(-3px);
+        }
+        100% {
+          transform: rotate(45deg) translateY(0);
+        }
+      }
+
+      /* Пиксельная граница для кристаллов */
+      .crystal {
+        box-shadow: 0px 0px 0px 1px var(--border), 1px 0px 0px 1px var(--border),
+          0px 1px 0px 1px var(--border), 1px 1px 0px 1px var(--border);
+      }
+
+      .crystal.lost {
+        box-shadow: 0px 0px 0px 1px var(--border), 1px 0px 0px 1px var(--border),
+          0px 1px 0px 1px var(--border), 1px 1px 0px 1px var(--border);
+        filter: brightness(0.5);
+      }
+      .crystal {
+        width: 16px;
+        height: 16px;
+        background-color: var(--accent);
+        position: relative;
+        /* Пиксельная форма кристалла */
+        clip-path: polygon(
+          50% 0%,
+          75% 25%,
+          100% 50%,
+          75% 75%,
+          50% 100%,
+          25% 75%,
+          0% 50%,
+          25% 25%
+        );
+        /* Пиксельная граница */
+        box-shadow: 0px 0px 0px 1px var(--border), 1px 0px 0px 1px var(--border),
+          0px 1px 0px 1px var(--border), 1px 1px 0px 1px var(--border);
+      }
+
+      @keyframes pixelBounce {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-4px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      .crystal.lost {
+        animation: pixelBounce 0.3s steps(2);
+      }
+
+      /* Стили для экрана завершения */
+      .completion-screen {
+        text-align: center;
+        padding: 20px;
+      }
+
+      .completion-image {
+        max-width: 100%;
+        height: auto;
+        border: var(--pixel-size) solid var(--border);
+        margin: 20px auto;
+      }
+
+      .boss-section {
+        max-width: 100%;
+        grid-column: 1 / -1;
+      }
+
+      .boss-completion {
+        background: #1a1a2a;
+        border: var(--pixel-size) solid var(--accent);
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 800px;
       }
 
       @media (max-width: 768px) {
@@ -407,30 +529,13 @@
         .lesson-content strong {
           color: var(--primary);
         }
-
-        .section-card {
-          position: relative;
-          /* Остальные стили остаются прежними */
-        }
-
-        .section-content {
-          position: relative;
-          padding: 15px;
-          padding-bottom: 40px; /* Добавляем место для номера */
-          /* Остальные стили остаются прежними */
-        }
-
-        /* Убираем z-index у изображения если он был */
-        .section-image {
-          z-index: 1;
-        }
       }
     </style>
   </head>
   <body>
     <div id="app">
       <div class="header">
-        <h1>ПУТЬ ПИТОНИСТА</h1>
+        <h1>ПУТЬ ПАЙТИКА</h1>
         <p>9 УРОВНЕЙ ДЛЯ МАСТЕРА КОДА</p>
       </div>
 
@@ -1076,6 +1181,23 @@
             },
           ],
         },
+
+        10: {
+          title: "Пройти босса!",
+          description: "Все пройденные темы",
+          image: "13.jpg",
+          theory:
+            "Босс-уровень!\n\nПроверь свои знания по всем темам в 20 сложных задачах.",
+          tasks: [
+            // 20 задач, комбинирующих все предыдущие темы
+            {
+              code: "x = 5\ny = 3\nif x > y:\n    print(x % y)\nelse:\n    print(y % x)",
+              answer: "2",
+              explanation: "Условные операторы + арифметика",
+            },
+            // остальные 19 задач...
+          ],
+        },
       };
 
       // Состояние пользователя
@@ -1108,38 +1230,59 @@
         );
       }
 
-      // Загрузка разделов
       function loadSections() {
         initProgress();
 
         let html = '<div class="sections-grid">';
 
-        for (const [id, section] of Object.entries(sectionsData)) {
+        // Выводим основные разделы 1-9
+        for (let id = 1; id <= 9; id++) {
+          const section = sectionsData[id];
           const progress = userProgress[id];
           const progressText = `${progress.solved}/${
             progress.total
           } (${Math.round((progress.solved / progress.total) * 100)}%)`;
-          const progressPercent = Math.round(
-            (progress.solved / progress.total) * 100
-          );
 
           html += `
-            <div class="section-card" onclick="showSection('${id}')">
-                <div class="image-container">
-                    <img src="${
-                      section.image
-                    }" class="section-image" alt="${section.title}">
-                </div>
-                <div class="section-content">
-                    <h3 class="section-title">${section.title.toUpperCase()}</h3>
-                    <p class="section-description">${section.description}</p>
-                    <div class="progress">Решено: ${progressText}</div>
-                    <button class="btn">СТАРТ</button>
-                    <div class="section-number">${id}</div>
-                </div>
-            </div>
-            `;
+              <div class="section-card" onclick="showSection('${id}')">
+                  <div class="image-container">
+                      <img src="images/${
+                        section.image
+                      }" class="section-image" alt="${section.title}">
+                  </div>
+                  <div class="section-content">
+                      <h3 class="section-title">${section.title.toUpperCase()}</h3>
+                      <p class="section-description">${section.description}</p>
+                      <div class="progress">Решено: ${progressText}</div>
+                      <button class="btn">СТАРТ</button>
+                      <div class="section-number">${id}</div>
+                  </div>
+              </div>
+          `;
         }
+        // Добавляем босс-раздел (10) в конце по центру
+        const bossSection = sectionsData[10];
+        const bossProgress = userProgress[10];
+        const bossProgressText = `${bossProgress.solved}/${
+          bossProgress.total
+        } (${Math.round((bossProgress.solved / bossProgress.total) * 100)}%)`;
+
+        html += `
+          <div class="section-card boss-section" onclick="showSection('10')">
+              <div class="image-container">
+                  <img src="images/${
+                    bossSection.image
+                  }" class="section-image" alt="${bossSection.title}">
+              </div>
+              <div class="section-content">
+                  <h3 class="section-title">${bossSection.title.toUpperCase()}</h3>
+                  <p class="section-description">${bossSection.description}</p>
+                  <div class="progress">Решено: ${bossProgressText}</div>
+                  <button class="btn" style="background: var(--accent);">БОСС-БОЙ</button>
+                  <div class="section-number">10</div>
+              </div>
+          </div>
+      `;
 
         html += "</div>";
         document.getElementById("content").innerHTML = html;
@@ -1189,7 +1332,10 @@
           /```python\n([\s\S]*?)```/g,
           function (match, code) {
             // Удаляем лишние пробелы в начале каждой строки кода
-            code = code.replace(/^\s+/gm, "");
+            code = code.replace(/^(\s*)/gm, function (match) {
+              // Заменяем каждый пробел на &nbsp; для сохранения отступов
+              return match.replace(/ /g, "&nbsp;");
+            });
             return `<pre><code class="python">${code.trim()}</code></pre>`;
           }
         );
@@ -1256,14 +1402,16 @@
                           ? '<div style="color: var(--secondary); font-size: 10px; margin-bottom: 10px;">✓ Вы уже решили эту задачу</div>'
                           : ""
                       }
-                      <div class="crystals">
+                      <div class="crystals" title="Попытки: ${attemptsLeft}/3">
                           ${Array(3)
                             .fill()
                             .map(
                               (_, i) =>
                                 `<div class="crystal ${
                                   i >= attemptsLeft ? "lost" : ""
-                                }"></div>`
+                                }" style="background-position: -${
+                                  i * 16
+                                }px 0"></div>`
                             )
                             .join("")}
                       </div>
@@ -1396,8 +1544,92 @@
           currentAnswer = "";
           showTask();
         } else {
-          showSection(currentSection);
+          if (parseInt(currentSection) === 10) {
+            // Для босс-раздела
+            const html = `
+              <div class="nav-buttons">
+                <button class="btn" onclick="loadSections()">← К СПИСКУ РАЗДЕЛОВ</button>
+              </div>
+              <div class="lesson-container" style="text-align: center;">
+                <h2 class="lesson-title">ВЫ ПОБЕДИЛИ БОССА!</h2>
+                <img src="images/23.jpg" style="max-width: 100%; height: auto; margin: 20px 0; border: 4px solid var(--border);">
+                <p>Вперёд к новым победам!</p>
+                <button class="btn" onclick="loadSections()">ВЕРНУТЬСЯ К РАЗДЕЛАМ</button>
+              </div>
+            `;
+            document.getElementById("content").innerHTML = html;
+          } else {
+            showSectionCompleteScreen();
+          }
         }
+      }
+
+      function showSectionCompleteScreen() {
+        const sectionNumber = parseInt(currentSection);
+        const nextSection = sectionNumber < 10 ? sectionNumber + 1 : null;
+        const prevSection = sectionNumber > 1 ? sectionNumber - 1 : null;
+
+        const progress = userProgress[currentSection];
+        const completionPercent = Math.round(
+          (progress.solved / progress.total) * 100
+        );
+        const isBossSection = sectionNumber === 10;
+        const isWin = completionPercent >= 70;
+
+        // Определяем какая картинка показывать
+        let imageName;
+        if (isWin) {
+          imageName = isBossSection ? "23.jpg" : 13 + sectionNumber + ".jpg";
+        } else {
+          imageName = "lose.jpg";
+        }
+
+        const html = `
+          <div class="nav-buttons">
+            <button class="btn" onclick="showSection('${currentSection}')">← К РАЗДЕЛУ</button>
+          </div>
+          <div class="${
+            isBossSection ? "boss-completion" : "lesson-container"
+          } completion-screen">
+            <h2 class="lesson-title">
+              ${
+                isBossSection
+                  ? isWin
+                    ? "БОСС ПОБЕЖДЁН!"
+                    : "ВЫ ПРОИГРАЛИ БОССУ"
+                  : isWin
+                  ? `РАЗДЕЛ ${sectionNumber} ПРОЙДЕН!`
+                  : "РАЗДЕЛ НЕ ПРОЙДЕН"
+              }
+            </h2>
+            <div class="image-container">
+              <img src="images/${imageName}" class="section-image completion-image">
+            </div>
+            <div class="progress" style="margin: 20px 0; font-size: 14px;">
+              Результат: ${completionPercent}%
+            </div>
+            <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 20px;">
+              ${
+                prevSection
+                  ? `<button class="btn btn-secondary" onclick="showSection('${prevSection}')">← РАЗДЕЛ ${prevSection}</button>`
+                  : ""
+              }
+              <button class="btn" onclick="loadSections()">К СПИСКУ РАЗДЕЛОВ</button>
+              ${
+                !isBossSection && nextSection
+                  ? `<button class="btn btn-next" onclick="showSection('${nextSection}')">РАЗДЕЛ ${nextSection} →</button>`
+                  : ""
+              }
+              ${
+                !isWin || isBossSection
+                  ? `<button class="btn" style="background: var(--accent);" onclick="startTasks('${currentSection}')">ПРОЙТИ ЗАНОВО</button>`
+                  : ""
+              }
+            </div>
+          </div>
+        `;
+
+        document.getElementById("content").innerHTML = html;
       }
 
       // Инициализация
