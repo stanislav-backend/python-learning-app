@@ -1344,10 +1344,17 @@
           /```python\n([\s\S]*?)```/g,
           function (match, code) {
             // Удаляем лишние пробелы в начале каждой строки кода
-            code = code.replace(/^(\s*)/gm, function (match) {
-              // Заменяем каждый пробел на &nbsp; для сохранения отступов
-              return match.replace(/ /g, "&nbsp;");
-            });
+            // Удаление общих отступов у всех строк кода
+            code = code.replace(/^\s*\n|\n\s*$/g, ""); // убираем пустые строки в начале и в конце
+            const lines = code.split("\n");
+            const minIndent = Math.min(
+              ...lines
+                .filter((l) => l.trim())
+                .map((l) => l.match(/^ */)[0].length)
+            );
+            code = lines
+              .map((l) => l.slice(minIndent).replace(/ /g, "&nbsp;"))
+              .join("<br>");
             return `<pre><code class="python">${code.trim()}</code></pre>`;
           }
         );
