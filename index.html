@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Путь Пайтика</title>
+    <title>Путь Пойтика</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
       rel="stylesheet"
@@ -1179,8 +1179,7 @@
           title: "Пройти босса!",
           description: "Все пройденные темы",
           image: "13.jpg",
-          theory:
-            "Босс-уровень!\n\nПроверь свои знания по всем темам в 20 сложных задачах.",
+          theory: "Босс-уровень!\n\nПроверь свои знания по всем темам.",
           tasks: [
             // 20 задач, комбинирующих все предыдущие темы
             {
@@ -1412,22 +1411,25 @@
                       <div class="task-code">
                           <pre>${task.code}</pre>
                       </div>
-                      <input type="text" class="answer-input" id="user-answer" placeholder="Введите ответ" value="${currentAnswer}" readonly onclick="this.removeAttribute('readonly'); this.focus()" onblur="this.setAttribute('readonly', '')" onkeyup="checkAnswerOnEnter(event)">
+                      <input type="text" class="answer-input" id="user-answer" placeholder="Введите ответ" value="${currentAnswer}"onclick="this.focus()">
                       <button class="btn btn-check" onclick="checkAnswer()">ОТВЕТИТЬ</button>
                       <div class="answer-result" id="answer-result">
               </div>
                   `;
 
         document.getElementById("content").innerHTML = html;
-        // Убрали автофокус
-        document.addEventListener("click", function (e) {
-          if (
-            e.target.id !== "user-answer" &&
-            document.getElementById("user-answer")
-          ) {
-            document.getElementById("user-answer").blur();
+
+        // Обработчик клика для скрытия клавиатуры
+        const handleDocumentClick = (e) => {
+          const input = document.getElementById("user-answer");
+          if (input && e.target !== input) {
+            input.blur(); // Закрывает клавиатуру
           }
-        });
+        };
+
+        // Удаляем старый обработчик (если был) и добавляем новый
+        document.removeEventListener("click", handleDocumentClick); // Важно!
+        document.addEventListener("click", handleDocumentClick);
       }
 
       // Предыдущая задача
