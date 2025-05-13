@@ -1268,7 +1268,7 @@
         } (${Math.round((bossProgress.solved / bossProgress.total) * 100)}%)`;
 
         html += `
-          <div class="section-card boss-section" onclick="showSection('10')">
+          <div class="section-card" onclick="showSection('10')">
               <div class="image-container">
                   <img src="${
                     bossSection.image
@@ -1419,14 +1419,22 @@
                       <div class="task-code">
                           <pre>${task.code}</pre>
                       </div>
-                      <input type="text" class="answer-input" id="user-answer" placeholder="Введите ответ" value="${currentAnswer}" onkeyup="checkAnswerOnEnter(event)">
+                      <input type="text" class="answer-input" id="user-answer" placeholder="Введите ответ" value="${currentAnswer}" readonly onclick="this.removeAttribute('readonly'); this.focus()" onblur="this.setAttribute('readonly', '')" onkeyup="checkAnswerOnEnter(event)">
                       <button class="btn btn-check" onclick="checkAnswer()">ОТВЕТИТЬ</button>
                       <div class="answer-result" id="answer-result">
               </div>
                   `;
 
         document.getElementById("content").innerHTML = html;
-        document.getElementById("user-answer").focus();
+        // Убрали автофокус
+        document.addEventListener("click", function (e) {
+          if (
+            e.target.id !== "user-answer" &&
+            document.getElementById("user-answer")
+          ) {
+            document.getElementById("user-answer").blur();
+          }
+        });
       }
 
       // Предыдущая задача
@@ -1439,11 +1447,13 @@
         }
       }
 
-      // Проверить ответ при нажатии Enter
       function checkAnswerOnEnter(event) {
-        currentAnswer = document.getElementById("user-answer").value;
+        const input = document.getElementById("user-answer");
+        currentAnswer = input.value.trim();
+
         if (event.key === "Enter") {
           event.preventDefault();
+          input.blur(); // Добавили закрытие клавиатуры
           checkAnswer();
         }
       }
