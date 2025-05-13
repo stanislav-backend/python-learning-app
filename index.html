@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Путь Пэйтика</title>
+    <title>Путь Пайтика</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
       rel="stylesheet"
@@ -521,7 +521,7 @@
   <body>
     <div id="app">
       <div class="header">
-        <h1>ПУТЬ ПЭЙТИКА</h1>
+        <h1>ПУТЬ ПАЙТИКА</h1>
         <p>10 УРОВНЕЙ ДЛЯ МАСТЕРА КОДА</p>
       </div>
 
@@ -1180,29 +1180,99 @@
               explanation: "Арифметические операции",
             },
             {
-              code: "x = 10\ny = 3\nprint(x // y, x % y)",
-              answer: "3 1",
-              explanation: "Арифметические операции",
+              code: "s = 'Python'\nprint(s[1] + s[-2:])",
+              answer: "yon",
+              explanation: "Индексация строк",
             },
             {
-              code: "x = 10\ny = 3\nprint(x // y, x % y)",
-              answer: "3 1",
-              explanation: "Арифметические операции",
+              code: "nums = [1, 2, 3]\nnums.append(nums[0] * 2)\nprint(nums)",
+              answer: "[1, 2, 3, 2]",
+              explanation: "Работа со списками",
             },
             {
-              code: "x = 10\ny = 3\nprint(x // y, x % y)",
-              answer: "3 1",
-              explanation: "Арифметические операции",
+              code: "for i in range(2, 5):\n    print(i * 2, end=' ')",
+              answer: "4 6 8",
+              explanation: "Цикл for с range",
             },
             {
-              code: "x = 10\ny = 3\nprint(x // y, x % y)",
-              answer: "3 1",
-              explanation: "Арифметические операции",
+              code: "def greet(name):\n    return f'Hello, {name}!'\nprint(greet('Alice'))",
+              answer: "Hello, Alice!",
+              explanation: "Простые функции",
             },
             {
-              code: "x = 10\ny = 3\nprint(x // y, x % y)",
-              answer: "3 1",
-              explanation: "Арифметические операции",
+              code: "x = 15\nif x % 2 == 0:\n    print('Even')\nelse:\n    print('Odd')\nprint('Done')",
+              answer: "Odd\nDone",
+              explanation: "Условия + вывод",
+            },
+            {
+              code: "s = 'hello'\nprint(s.upper()[1:4])",
+              answer: "ELL",
+              explanation: "Методы строк + срезы",
+            },
+            {
+              code: "count = 0\nwhile count < 3:\n    print(count * 2)\n    count += 1",
+              answer: "0\n2\n4",
+              explanation: "Цикл while",
+            },
+            {
+              code: "def max_num(a, b):\n    return a if a > b else b\nprint(max_num(7, max_num(3, 5)))",
+              answer: "7",
+              explanation: "Функции с условиями",
+            },
+            {
+              code: "words = ['apple', 'banana', 'cherry']\nprint([len(word) for word in words])",
+              answer: "[5, 6, 6]",
+              explanation: "Списковые выражения",
+            },
+            {
+              code: "s = 'abc123'\ndigits = 0\nfor ch in s:\n    if ch.isdigit():\n        digits += 1\nprint(digits)",
+              answer: "3",
+              explanation: "Цикл + строковые методы",
+            },
+            {
+              code: "def is_palindrome(s):\n    return s == s[::-1]\nprint(is_palindrome('racecar'))",
+              answer: "True",
+              explanation: "Функции + срезы строк",
+            },
+            {
+              code: "nums = [1, 5, 3, 8, 2]\nresult = 0\nfor num in nums:\n    if num > 4:\n        result += num\nprint(result)",
+              answer: "13",
+              explanation: "Цикл + условие + списки",
+            },
+            {
+              code: "def count_vowels(s):\n    vowels = 'aeiou'\n    return sum(1 for ch in s if ch in vowels)\nprint(count_vowels('Programming'))",
+              answer: "3",
+              explanation: "Функции + генераторы",
+            },
+            {
+              code: "x = 5\ny = 3\nz = 7\nif x > y and y < z:\n    print('Yes')\nif not x == z:\n    print('No')",
+              answer: "Yes\nNo",
+              explanation: "Сложные условия",
+            },
+            {
+              code: "def sum_even(numbers):\n    return sum(num for num in numbers if num % 2 == 0)\nprint(sum_even([1, 2, 3, 4, 5, 6]))",
+              answer: "12",
+              explanation: "Функции + генераторы + условия",
+            },
+            {
+              code: "s = 'HelloWorld'\nresult = ''\nfor i in range(len(s)):\n    if i % 2 == 0:\n        result += s[i].upper()\n    else:\n        result += s[i].lower()\nprint(result)",
+              answer: "HeLlOwOrLd",
+              explanation: "Цикл + строки + условия",
+            },
+            {
+              code: "def factorial(n):\n    result = 1\n    for i in range(1, n+1):\n        result *= i\n    return result\nprint(factorial(5))",
+              answer: "120",
+              explanation: "Функции + циклы",
+            },
+            {
+              code: "numbers = [3, 1, 4, 1, 5, 9]\nfor i in range(len(numbers)):\n    if numbers[i] == max(numbers):\n        print(f'Max at {i}')\n        break",
+              answer: "Max at 5",
+              explanation: "Цикл + списки + break",
+            },
+            {
+              code: "def process_string(s):\n    s = s.strip().lower()\n    return s if len(s) > 3 else s.upper()\nprint(process_string('  PyTHon  '))\nprint(process_string('hi'))",
+              answer: "python\nHI",
+              explanation: "Функции + строковые методы + условия",
             },
           ],
         },
