@@ -529,7 +529,7 @@
     <div id="app">
       <div class="header">
         <h1>ПУТЬ ПАЙТИКА</h1>
-        <p>10 УРОВНЕЙ ДЛЯ МАСТЕРА КОДА</p>
+        <p>9 УРОВНЕЙ ДЛЯ МАСТЕРА КОДА</p>
       </div>
 
       <div id="content">
@@ -538,7 +538,7 @@
     </div>
 
     <script>
-      // Полные данные всех 9 разделов
+      // Полные данные всех 10 разделов
       const sectionsData = {
         1: {
           title: "Переменные и типы данных",
@@ -1181,13 +1181,36 @@
           image: "13.jpg",
           theory: "Босс-уровень!\n\nПроверь свои знания по всем темам.",
           tasks: [
-            // 20 задач, комбинирующих все предыдущие темы
             {
-              code: "x = 5\ny = 3\nif x > y:\n    print(x % y)\nelse:\n    print(y % x)",
-              answer: "2",
-              explanation: "Условные операторы + арифметика",
+              code: "x = 10\ny = 3\nprint(x // y, x % y)",
+              answer: "3 1",
+              explanation: "Арифметические операции",
             },
-            // остальные 19 задач...
+            {
+              code: "x = 10\ny = 3\nprint(x // y, x % y)",
+              answer: "3 1",
+              explanation: "Арифметические операции",
+            },
+            {
+              code: "x = 10\ny = 3\nprint(x // y, x % y)",
+              answer: "3 1",
+              explanation: "Арифметические операции",
+            },
+            {
+              code: "x = 10\ny = 3\nprint(x // y, x % y)",
+              answer: "3 1",
+              explanation: "Арифметические операции",
+            },
+            {
+              code: "x = 10\ny = 3\nprint(x // y, x % y)",
+              answer: "3 1",
+              explanation: "Арифметические операции",
+            },
+            {
+              code: "x = 10\ny = 3\nprint(x // y, x % y)",
+              answer: "3 1",
+              explanation: "Арифметические операции",
+            },
           ],
         },
       };
@@ -1206,9 +1229,13 @@
           if (!userProgress[sectionId]) {
             userProgress[sectionId] = {
               solved: 0,
-              total: sectionsData[sectionId].tasks.length,
+              total: sectionsData[sectionId].tasks.length, // Здесь будет актуальное количество
               completedTasks: [],
             };
+          } else {
+            // Обновляем total, если количество задач изменилось
+            userProgress[sectionId].total =
+              sectionsData[sectionId].tasks.length;
           }
         }
         saveProgress();
@@ -1238,7 +1265,7 @@
           html += `
               <div class="section-card" onclick="showSection('${id}')">
                   <div class="image-container">
-                      <img src="${
+                      <img src="images/${
                         section.image
                       }" class="section-image" alt="${section.title}">
                   </div>
@@ -1262,7 +1289,7 @@
         html += `
           <div class="section-card" onclick="showSection('10')">
               <div class="image-container">
-                  <img src="${
+                  <img src="images/${
                     bossSection.image
                   }" class="section-image" alt="${bossSection.title}">
               </div>
@@ -1549,23 +1576,7 @@
           currentAnswer = "";
           showTask();
         } else {
-          if (parseInt(currentSection) === 10) {
-            // Для босс-раздела
-            const html = `
-              <div class="nav-buttons">
-                <button class="btn" onclick="loadSections()">← К СПИСКУ РАЗДЕЛОВ</button>
-              </div>
-              <div class="lesson-container" style="text-align: center;">
-                <h2 class="lesson-title">ВЫ ПОБЕДИЛИ БОССА!</h2>
-                <img src="23.jpg" style="max-width: 100%; height: auto; margin: 20px 0; border: 4px solid var(--border);">
-                <p>Вперёд к новым победам!</p>
-                <button class="btn" onclick="loadSections()">ВЕРНУТЬСЯ К РАЗДЕЛАМ</button>
-              </div>
-            `;
-            document.getElementById("content").innerHTML = html;
-          } else {
-            showSectionCompleteScreen();
-          }
+          showSectionCompleteScreen();
         }
       }
 
@@ -1584,9 +1595,13 @@
         // Определяем какая картинка показывать
         let imageName;
         if (isWin) {
-          imageName = isBossSection ? "23.jpg" : 13 + sectionNumber + ".jpg";
+          imageName = 13 + sectionNumber + ".jpg";
         } else {
-          imageName = "lose.jpg";
+          if (sectionNumber == 10) {
+            imageName = "lose_boss.jpg";
+          } else {
+            imageName = "lose.jpg";
+          }
         }
 
         const html = `
@@ -1608,7 +1623,7 @@
               }
             </h2>
             <div class="image-container">
-              <img src="${imageName}" class="section-image completion-image">
+              <img src="images/${imageName}" class="section-image completion-image">
             </div>
             <div class="progress" style="margin: 20px 0; font-size: 14px;">
               Результат: ${completionPercent}%
